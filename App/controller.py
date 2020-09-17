@@ -46,7 +46,6 @@ def initCatalog():
     """
     # catalog es utilizado para interactuar con el modelo
     print ("Voy a inicializar el catalogo")
-    input ("Estoy aqui...")
     catalog = model.newCatalog()
 
     return catalog
@@ -65,40 +64,46 @@ def loadData(catalog, moviesfile):
     loadMovies(catalog, moviesfile) 
     
 
-   
+
 def loadMovies(catalog, moviesfile):
     """
     Carga cada una de las lineas del archivo de peliculas.
     - Se agrega cada pelicula al catalogo de movies
     - Por cada movie se encuentran sus productor y por cada
-      productor, se crea una lista con sus peliculas
+    productor, se crea una lista con sus peliculas
     """
     moviesfile = cf.data_dir + moviesfile
-    print ("")
-    print (moviesfile)
-    input ("Clic para cargar archivo......")
     #input_file = csv.DictReader(open(moviesfile))
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
-    
     for movie in input_file:
-
         model.addMovie(catalog, movie)
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
-        average = movie['vote_average'].split(";")  # Se obtienen promedio  
-        nameMovie = movie['original_title'].split(";")  # Se obtienen nombre de peicula   
-        for j in companies:
-            print (j)
-     #       model.addProductionCompany(catalog, j.strip(), nameMovie)
-        for j in average:
-            print (j) 
-        for j in nameMovie:
-            print (j)              
+        for production in companies:
+            model.addProdCompany(catalog, production.strip(), movie)
+        
+        
+        #average = movie['vote_average'].split(";")  # Se obtienen promedio  
+        #nameMovie = movie['original_title'].split(";")  # Se obtienen nombre de peicula   
+        #for j in companies:
+            #print (j)
+    #       model.addProductionCompany(catalog, j.strip(), nameMovie)
+        #for j in average:
+            #print (j) 
+        #for j in nameMovie:
+            #print (j)              
             
-#    print (mp.size(movie['production_companies'])) 
 
-    input (" El nobre de la compania y el tamano del Map. Clic para continuar")
-
+    #input (" El nombre de la compania y el tamano del Map. Clic para continuar")
 
 
+# ___________________________________________________
+#  Consultas
+# ___________________________________________________
 
+def getBooksByAuthor(catalog, authorname):
+    """
+    Retorna los libros de un autor
+    """
+    authorinfo = model.getBooksByAuthor(catalog, authorname)
+    return authorinfo
 

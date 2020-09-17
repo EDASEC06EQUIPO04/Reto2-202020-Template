@@ -23,7 +23,7 @@ def newCatalog():
   
     catalog = {'movies': None,
                'id': None,
-               'production_companies_ID': None,
+               'production_companies': None,
                'original_title': None,
                'vote_average': None,
                'vote_count': None}
@@ -36,11 +36,11 @@ def newCatalog():
     print (  catalog['movies'])
     input ("@@@@ Clic para continuar @@@@ ")
 
-    catalog['production_companies_ID'] = mp.newMap(2000,
-                                   maptype='PROBING',
-                                   #PROBING, CHAINING
-                                   loadfactor=0.4,
-                                   comparefunction=compareMovieIds)
+    catalog['production_companies'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareMovieIds)
 
     return catalog 
     
@@ -93,10 +93,23 @@ def newPelicula(name):
     Crea una nueva estructura para modelar los pelicuales de un productora
     y su promedio de ratings
     """
-    productora = {'name': "", "pelicula": None,  "average_rating": 0}
-    productora['name'] = name
-    productora['pelicula'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)
+    productora = {'production_companies': "", "movies": None,  "average_rating": 0}
+    productora['production_companies'] = name
+    productora['movies'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)
     return pelicula
+
+
+def newProd(name):
+    """
+    Crea una nueva estructura para modelar los libros de un autor
+    y su promedio de ratings
+    """
+    author = {'name': "", "books": None,  "average_rating": 0}
+    author['name'] = name
+    author['books'] = lt.newList('SINGLE_LINKED', compareAuthorsByName)
+    return author
+
+
 
 
 def addProductionCompany(catalog, companyName, movie):
@@ -109,8 +122,6 @@ def addProductionCompany(catalog, companyName, movie):
     print ("\n", nombrePelicula)
     input (" Clic para continuar despues de nombre pelicula...")
 
-
-    
     #existePelicula = mp.contains(nombrePelicula, companyName)
     existePelicula = mp.contains(catalog['production_companies_ID'], companyName)
 
@@ -143,6 +154,21 @@ def addProductionCompany(catalog, companyName, movie):
 # Funciones de consulta
 # ==============================
 
+def addProdCompany(catalog, prodcom, movie):
+    """
+    Esta función adiciona un libro a la lista de libros publicados
+    por un autor.
+    Cuando se adiciona el libro se actualiza el promedio de dicho autor
+    """
+    movies = catalog['movies']
+    existauthor = mp.contains(movies, prodcom)
+    if existauthor:
+        entry = mp.get(movies, prodcom)
+        movie = me.getValue(entry)
+    else:
+        company = newAuthor(prodcom)
+        mp.put(movies, prodcom, company)
+    lt.addLast(company['movies'], book)
 
 
 # ==============================

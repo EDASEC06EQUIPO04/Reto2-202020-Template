@@ -66,7 +66,7 @@ def loadBooks(catalog, booksfile):
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
     - Por cada libro se encuentran sus autores y por cada
-      autor, se crea una lista con sus libros
+    autor, se crea una lista con sus libros
     """
     booksfile = cf.data_dir + booksfile
     input_file = csv.DictReader(open(booksfile))

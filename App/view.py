@@ -56,6 +56,22 @@ booktagsfile = 'GoodReads/book_tags-small.csv'
 #  el controlador.
 # ___________________________________________________
 
+def printProductionCompany(prodCompany):
+ #output pelicula de una compañia de producción
+ #output =: imprime peliculas de una compañoia de producción
+    if author:
+        print('compañia encontrada: ' + prodCompany['production_company'])
+        print('Promedio: ' + str(prodCompany['vote_average']))
+        print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
+        iterator = it.newIterator(prodCompany['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'] + movie['vote_average'])
+    else:
+        print('No se encontro la compañia buscada')
+
+
+
 
 
 # ___________________________________________________
@@ -69,8 +85,8 @@ def printMenu():
     print(" ")
     print("(1) Inicializar Catálogo de movies y casting")
     print("(2) Cargar información en el catálogo de movies y casting")
-    print("(3)   REQ. 1: Consultar los productoras de cine")
-    print("(4)   REQ. 2: Consultar los a un director")
+    print("(3)   REQ. 1: Consultar las productoras de cine")
+    print("(4)   REQ. 2: Consultar a un director")
     print("(5)   REQ. 3: Consultar a un actor")
     print("(6)   REQ. 4: Entender un genero cinematografico")
     print("(7)   REQ. 5: Consultar peliculas por pais")
@@ -96,12 +112,12 @@ while True:
         print("Cargando información de los archivos ....")
         #controller.loadData(cont, booksfile, tagsfile, booktagsfile)
         controller.loadData(cont, moviesSmall)
-        print ("De han cargado tanas peliculas: ", lt.size(cont['movies']))
-        input ("dar clic par ver lo cargado...")
-        for i in range (0,10):
-           print("\n**************************************************************************************")
-           print (lt.getElement(cont['movies'],i))
-           
+        print ("Se han cargado tanas peliculas: ", lt.size(cont['movies']))
+        #input ("dar clic par ver lo cargado...")
+        #for i in range (0,10):
+            #print("\n**************************************************************************************")
+            # print (lt.getElement(cont['movies'],i))
+        
         #print('Peliculas cargadas: ' + str(lt.size(cont)))
         
         input ("clic para coninuar")
@@ -111,7 +127,9 @@ while True:
         pass
     
     elif int(inputs[0]) == 3:
-        input ("Opcion en construccion")
+        name = input("Nombre de compañia: ")
+        prodInfo = controller.getBooksByAuthor(cont, name)
+        printProductionCompany(prodInfo)
         pass
 
     elif int(inputs[0]) == 4:
