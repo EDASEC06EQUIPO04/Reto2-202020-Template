@@ -59,8 +59,8 @@ booktagsfile = 'GoodReads/book_tags-small.csv'
 def printProductionCompany(prodCompany):
  #output pelicula de una compañia de producción
  #output =: imprime peliculas de una compañoia de producción
-    if author:
-        print('compañia encontrada: ' + prodCompany['production_company'])
+    if prodCompany:
+        print('compañia encontrada: ', prodCompany['production_company'])
         print('Promedio: ' + str(prodCompany['vote_average']))
         print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
         iterator = it.newIterator(prodCompany['movies'])
@@ -112,7 +112,7 @@ while True:
         print("Cargando información de los archivos ....")
         #controller.loadData(cont, booksfile, tagsfile, booktagsfile)
         controller.loadData(cont, moviesSmall)
-        print ("Se han cargado tanas peliculas: ", lt.size(cont['movies']))
+        print ("Se han cargado", lt.size(cont['movies']), "peliculas: ")
         #input ("dar clic par ver lo cargado...")
         #for i in range (0,10):
             #print("\n**************************************************************************************")
@@ -128,8 +128,8 @@ while True:
     
     elif int(inputs[0]) == 3:
         name = input("Nombre de compañia: ")
-        prodInfo = controller.getBooksByAuthor(cont, name)
-        printProductionCompany(prodInfo)
+        nombreCompanias = controller.getMoviesProdCompany(cont, name)
+        printProductionCompany(name)
         pass
 
     elif int(inputs[0]) == 4:

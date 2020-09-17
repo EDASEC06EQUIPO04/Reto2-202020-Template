@@ -107,3 +107,9 @@ def getBooksByAuthor(catalog, authorname):
     authorinfo = model.getBooksByAuthor(catalog, authorname)
     return authorinfo
 
+
+def getMoviesProdCompany (cat, company):
+    infoCompania =model.getMoviesProdCompany(cat,company)
+    return infoCompania
+
+

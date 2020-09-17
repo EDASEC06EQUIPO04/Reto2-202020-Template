@@ -34,13 +34,13 @@ def newCatalog():
     #lst = lt.newList("SINGLE_LINKED")
 
     print (  catalog['movies'])
-    input ("@@@@ Clic para continuar @@@@ ")
+    #input ("@@@@ Clic para continuar @@@@ ")
 
     catalog['production_companies'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
-                                    comparefunction=compareMovieIds)
+                                    comparefunction=compareproductionCompanies)
 
     return catalog 
     
@@ -104,10 +104,23 @@ def newProd(name):
     Crea una nueva estructura para modelar los libros de un autor
     y su promedio de ratings
     """
-    author = {'name': "", "books": None,  "average_rating": 0}
-    author['name'] = name
-    author['books'] = lt.newList('SINGLE_LINKED', compareAuthorsByName)
-    return author
+    company= {'production_companies': "", "movies": None,  "average_rating": 0}
+    company['production_companies'] = name
+    company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
+    return company
+
+def compareprodComs(keyname, company):
+    """
+    Compara dos nombres de autor. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    authentry = me.getKey(company)
+    if (keyname == authentry):
+        return 0
+    elif (keyname > authentry):
+        return 1
+    else:
+        return -1
 
 
 
@@ -160,24 +173,21 @@ def addProdCompany(catalog, prodcom, movie):
     por un autor.
     Cuando se adiciona el libro se actualiza el promedio de dicho autor
     """
-    movies = catalog['movies']
-    existauthor = mp.contains(movies, prodcom)
-    if existauthor:
-        entry = mp.get(movies, prodcom)
-        movie = me.getValue(entry)
+    companies = catalog['production_companies']
+    existincompany = mp.contains(companies, prodcom)
+    if existincompany:
+        entry = mp.get(companies, prodcom)
+        companyadd = me.getValue(entry)
     else:
-        company = newAuthor(prodcom)
-        mp.put(movies, prodcom, company)
-    lt.addLast(company['movies'], book)
+        companyadd = newProd(prodcom)
+        mp.put(companies, prodcom, companyadd)
+    lt.addLast(companyadd['movies'], movie)
 
 
 # ==============================
 # Funciones de Comparacion
 # ==============================
 def compareMovieIds(id1, id2):
-    """
-    Compara dos ids de libros
-    """
     if (id1 == id2):
         return 0
     elif id1 > id2:
@@ -198,3 +208,26 @@ def comparePeliculasByName(keyname, pelicula):
         return 1
     else:
         return -1
+
+
+def compareproductionCompanies(keyname, company):
+    """
+    Compara dos nombres de autor. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    authentry = me.getKey(company)
+    if (keyname == authentry):
+        return 0
+    elif (keyname > authentry):
+        return 1
+    else:
+        return -1
+
+
+
+
+def getMoviesProdCompany (cat, company):
+    compania = mp.get(cat['production_companies'], company)
+    if compania:
+        return me.getValue(compania)
+    return None
