@@ -61,8 +61,8 @@ def printProductionCompany(prodCompany):
  #output =: imprime peliculas de una compañoia de producción
     if prodCompany:
         print('compañia encontrada: ', prodCompany['production_company'])
-        print('Promedio: ' + str(prodCompany['vote_average']))
-        print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
+        #print('Promedio: ' + str(prodCompany['vote_average']))
+        #print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
         iterator = it.newIterator(prodCompany['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
@@ -120,16 +120,16 @@ while True:
         
         #print('Peliculas cargadas: ' + str(lt.size(cont)))
         
-        input ("clic para coninuar")
+        input ("clic para continuar")
         #print('Géneros cargados: ' + str(controller.tagsSize(cont)))
 
         
         pass
     
     elif int(inputs[0]) == 3:
-        name = input("Nombre de compañia: ")
-        nombreCompanias = controller.getMoviesProdCompany(cont, name)
-        printProductionCompany(name)
+        nameInput = input("Nombre de compañia: ")
+        nombreCompanias = controller.getMoviesProdCompany(cont, nameInput)
+        printProductionCompany(nombreCompanias)
         pass
 
     elif int(inputs[0]) == 4:

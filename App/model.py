@@ -96,7 +96,7 @@ def newPelicula(name):
     productora = {'production_companies': "", "movies": None,  "average_rating": 0}
     productora['production_companies'] = name
     productora['movies'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)
-    return pelicula
+    return productora
 
 
 def newProd(name):
@@ -201,7 +201,7 @@ def comparePeliculasByName(keyname, pelicula):
     Compara dos nombres de pelicula. El primero es una cadena
     y el segundo un entry de un map
     """
-#    pelhentry = me.getKey(pelicula)
+    pelhentry = me.getKey(pelicula)
     if (keyname == pelhentry):
         return 0
     elif (keyname > pelhentry):
