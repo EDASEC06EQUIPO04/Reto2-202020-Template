@@ -1,29 +1,13 @@
-"""
- * Copyright 2020, Departamento de sistemas y Computación
- * Universidad de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- """
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@             VIEW                   @@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 import sys
 import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
+from DISClib.ADT import map as mp
 from App import controller 
 #import controller
 assert config
@@ -33,12 +17,9 @@ Presenta el menu de opciones y por cada seleccion
 hace la solicitud al controlador para ejecutar la
 operación seleccionada.
 """
-
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-
-
 
 castingLarge='themoviesdb/MoviesCastingRaw-large.csv'
 castingSmall='themoviesdb/MoviesCastingRaw-small.csv'
@@ -48,16 +29,45 @@ booksfile = 'GoodReads/books-small.csv'
 tagsfile = 'GoodReads/tags.csv' 
 booktagsfile = 'GoodReads/book_tags-small.csv'
 
-
-
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
 
+def printProductionCompany(prodCompany):
+ #output pelicula de una compañia de producción
+ #output =: imprime peliculas de una compañoia de producción
+    if prodCompany:
+        
+        #print('Promedio: ' + str(prodCompany['vote_average']))
+        #print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
+        iterator = it.newIterator(prodCompany['movies'])
+        cuenteTotal=0
+        while it.hasNext(iterator):
+            cuenteTotal=cuenteTotal+1
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+    else:
+        print('No se encontro la compañia buscada')
+    return cuenteTotal
+
+def printPeliculasDirector(director):
+
+    if director:
+        
+        iterator = it.newIterator(director['id'])
+        cuenteTotal=0
+        while it.hasNext(iterator):
+            cuenteTotal=cuenteTotal+1
+            direct = it.next(iterator)
+        print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print('\nId_Director: ', director['id'])
 
 
+    else:
+        print('No se encontro el director seleccionado')
+    return cuenteTotal
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
@@ -69,8 +79,8 @@ def printMenu():
     print(" ")
     print("(1) Inicializar Catálogo de movies y casting")
     print("(2) Cargar información en el catálogo de movies y casting")
-    print("(3)   REQ. 1: Consultar los productoras de cine")
-    print("(4)   REQ. 2: Consultar los a un director")
+    print("(3)   REQ. 1: Consultar las productoras de cine")
+    print("(4)   REQ. 2: Consultar a un director")
     print("(5)   REQ. 3: Consultar a un actor")
     print("(6)   REQ. 4: Entender un genero cinematografico")
     print("(7)   REQ. 5: Consultar peliculas por pais")
@@ -96,26 +106,43 @@ while True:
         print("Cargando información de los archivos ....")
         #controller.loadData(cont, booksfile, tagsfile, booktagsfile)
         controller.loadData(cont, moviesSmall)
-        print ("De han cargado tanas peliculas: ", lt.size(cont['movies']))
-        input ("dar clic par ver lo cargado...")
-        for i in range (0,10):
-           print("\n**************************************************************************************")
-           print (lt.getElement(cont['movies'],i))
-           
-        #print('Peliculas cargadas: ' + str(lt.size(cont)))
-        
-        input ("clic para coninuar")
-        #print('Géneros cargados: ' + str(controller.tagsSize(cont)))
+        print ("Se han cargado", mp.size(cont["production_companies"]), "peliculas: ")
+        print("")
+        print("\n**************************************************************************************")
+        print (lt.getElement(cont['movies'],0))
+        ultimo=int(lt.size(cont['movies']))-1
+        print (lt.getElement(cont['movies'],ultimo))
+        print("")
+        input ("De pruenba se imprime primera y 'ultima pelicula. Clic para continuar")
 
-        
         pass
     
     elif int(inputs[0]) == 3:
-        input ("Opcion en construccion")
+        nameInput = input("Nombre de compañia productora: ")
+        nombreCompanias = controller.getMoviesProdCompany(cont, nameInput)
+        print("")
+        print("\n**************************************************************************************")
+        cuenteTotal=printProductionCompany(nombreCompanias)
+        print("\n**************************************************************************************")
+        # print(" Se encontraron  [ ", cuenteTotal, " ] peliculas de la productora")
+        input ("Clic para continuar")
         pass
 
     elif int(inputs[0]) == 4:
-        input ("Opcion en construccion")
+        cont1 = controller.initCatalogCast()
+        #print (cont1)
+        input ("Se creo el catalogo. Clic para continuar   ....")
+        print("Cargando información de los archivos ....")
+        #controller.loadData(cont, booksfile, tagsfile, booktagsfile)
+        controller.loadDataCast(cont1, castingSmall)
+        nameInput = input("Nombre de director: ")
+        nombreDirectores = controller.getMoviesDirector(cont1, nameInput)
+        print("")
+        print("\n**************************************************************************************")
+        cuenteTotal=printPeliculasDirector(nombreDirectores)
+        print("\n**************************************************************************************")
+        print(" Se encontraron  [ ", cuenteTotal, " ] peliculas del director selecionado")
+        input ("Clic para continuar")
         pass
 
     elif int(inputs[0]) == 5:
