@@ -61,8 +61,8 @@ def printPeliculasDirector(director):
         while it.hasNext(iterator):
             cuenteTotal=cuenteTotal+1
             direct = it.next(iterator)
-        print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print('\nId_Director: ', director['id'])
+            print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('\nId_Director: ', " ", director['director'], " " ,director['average_rating'])
 
 
     else:
@@ -129,14 +129,15 @@ while True:
         pass
 
     elif int(inputs[0]) == 4:
-        cont1 = controller.initCatalogCast()
+        #cont1 = controller.initCatalogCast()
         #print (cont1)
         input ("Se creo el catalogo. Clic para continuar   ....")
         print("Cargando información de los archivos ....")
         #controller.loadData(cont, booksfile, tagsfile, booktagsfile)
-        controller.loadDataCast(cont1, castingSmall)
+        controller.loadDataCast(cont, castingSmall)
+        print ("")
         nameInput = input("Nombre de director: ")
-        nombreDirectores = controller.getMoviesDirector(cont1, nameInput)
+        nombreDirectores = controller.getMoviesDirector(cont, nameInput)
         print("")
         print("\n**************************************************************************************")
         cuenteTotal=printPeliculasDirector(nombreDirectores)

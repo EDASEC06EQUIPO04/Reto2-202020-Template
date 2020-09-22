@@ -8,12 +8,10 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 assert config
-
 """
 En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
 """
-
 # -----------------------------------------------------
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
@@ -25,9 +23,14 @@ def newCatalog():
                'production_companies': None,
                'original_title': None,
                'vote_average': None,
-               'vote_count': None}
+               'vote_count': None,
+               'director':None,
+               'director_Movies': None,
+               'id': None}
 
     catalog['movies'] = lt.newList('ARRAY_LIST', compareMovieIds)
+    catalog['id'] = lt.newList('ARRAY_LIST', compareDirectorIds)
+
     #lst = lt.newList("ARRAY_LIST")"SINGLE_LINKED")
 
     print (  catalog['movies'])
@@ -38,30 +41,14 @@ def newCatalog():
                                     #PROBING, CHAINING
                                     loadfactor=0.1,
                                     comparefunction=compareproductionCompanies)
-
-    return catalog 
-    
-def newCatalogCast():
-    
-    catalogCast = {'director':None,
-                   'director_Movies': None,
-                   'id': None
-                   
-                }
-
-    catalogCast['id'] = lt.newList('ARRAY_LIST', compareDirectorIds)
-    #lst = lt.newList("ARRAY_LIST")"SINGLE_LINKED")
-
-    print (  catalogCast['id'])
-    #input ("@@@@ Clic para continuar @@@@ ")
-
-    catalogCast['director_Movies'] = mp.newMap(2000,
+    catalog['director_Movies'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
                                     loadfactor=0.1,
                                     comparefunction=compareproductionDirector)
 
-    return catalogCast 
+    return catalog 
+    
 
 # Funciones para agregar informacion al catalogo
 def addId(catalogo1,id):
@@ -72,7 +59,6 @@ def addId(catalogo1,id):
     lt.addLast(catalogo1['id'], id)
 
 
-
 def addMovie(catalogo,movie):
     """
     Esta funcion adiciona un pelicula a la lista de movie,
@@ -80,16 +66,6 @@ def addMovie(catalogo,movie):
     """
     lt.addLast(catalogo['movies'], movie)
 
-
-def newPelicula(name):
-    """
-    Crea una nueva estructura para modelar los pelicuales de un productora
-    y su promedio de ratings
-    """
-    productora = {'production_companies': "", "movies": None,  "average_rating": 0}
-    productora['production_companies'] = name
-    productora['movies'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)
-    return productora
 
 
 def newProd(name):
@@ -126,7 +102,6 @@ def compareprodComsCast(keyname, directorCat):
     else:
         return -1
 
-
 def compareprodComs(keyname, company):
     """
     Compara dos nombres de autor. El primero es una cadena
@@ -139,9 +114,6 @@ def compareprodComs(keyname, company):
         return 1
     else:
         return -1
-
-
-
 
 def addProdCompany(catalog, prodcom, movie):
     """
@@ -176,8 +148,6 @@ def addDirectorId(catalog1, director, id):
 # ==============================
 # Funciones de consulta
 # ==============================
-
-
 
 
 # ==============================
@@ -239,8 +209,6 @@ def compareproductionCompanies(keyname, company):
         return 1
     else:
         return -1
-
-
 
 
 def getMoviesProdCompany (cat, company):

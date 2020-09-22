@@ -65,8 +65,10 @@ def loadIdMovies(catalogo1, castingfile):
     for id in input_file:
         model.addId(catalogo1, id)
         director= id['director_name'].split(";")  # Se obtienen las productoras
+        
         for idDir in director:
             model.addDirectorId(catalogo1, idDir.strip(), id)
+
         
 def loadData(catalog, moviesfile):
     """
