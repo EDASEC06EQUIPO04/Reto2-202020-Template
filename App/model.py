@@ -118,6 +118,16 @@ def newProd(name):
     company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
     return company
 
+
+
+
+
+
+
+
+
+
+
 def compareprodComs(keyname, company):
     """
     Compara dos nombres de autor. El primero es una cadena
@@ -133,12 +143,10 @@ def compareprodComs(keyname, company):
 
 
 
-
+#pretty sure this one is referenced by nothing and can be deleted
+#dont delete without validating it is in fact useless
 def addProductionCompany(catalog, companyName, movie):
-    """
-    Esta función adiciona una pelicula a la lista de pelicualas de una cierta productora
-    Cuando se adiciona el la pelicula se actualiza el promedio de de la ,is,a
-    """
+
     nombrePelicula = catalog['original_title']
     print ("")
     print ("\n", nombrePelicula)
@@ -214,15 +222,19 @@ def addProdCompany(catalog, prodcom, movie):
     lt.addLast(companyadd['movies'], movie)
 
 
-def getMoviesByDirector(catalog, nameInput):
-    """
-    Retorna los libros publicados en un año
-    """
-    director = mp.get(catalog['director_name'], nameInput)
-    movies=None
-    if director:
-        movies = me.getValue(director)['movies']
-    return movies
+def addGenre(catalog, genre, movie):
+
+    newgenre = catalog['genres']
+    existgenre = mp.contains(newgenre, genre)
+    if existgenre:
+        entry = mp.get(newgenre, genre)
+        genreToAdd = me.getValue(entry)
+    else:
+        genreToAdd = newProd(genre)
+        mp.put(newgenre, genre, genreToAdd)
+    lt.addLast(genreToAdd['movies'], movie)
+
+
 
 
 
@@ -284,3 +296,38 @@ def getMoviesProdCompany (cat, company):
     if compania:
         return me.getValue(compania)
     return None
+
+
+
+def getMoviesByDirector(catalog, nameInput):
+    #this function searches with the name defined in the catalogue, not the name in the CSV
+    
+    
+    directorlist= lt.newList(mp.get(['directors'], nameInput))
+    print(lt.size(directorlist))
+
+
+def getMoviesGenre(cat, genre):
+    genreresult = mp.get(cat['genres'], genre)
+    if genreresult:
+        return me.getValue(genreresult)
+    return None
+
+
+
+
+
+"""
+    directorsearched = mp.get(catalog['directors'], nameInput)
+    if directorsearched:
+        return me.getValue(directorsearched)
+    return None
+
+
+    result = mp.get(catalog['directors'], nameInput)
+    movies = None
+    if result:
+        movies = me.getValue(result)['movies']
+    return movies
+"""
+

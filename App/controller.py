@@ -61,7 +61,7 @@ def loadData(catalog, moviesfile, castFile):
     Carga los datos de los archivos en el modelo
     """
     loadMovies(catalog, moviesfile)
-    loadDirectors( catalog, castFile)
+    loadDirectors( catalog, castFile) #its called load directors but it loads the entire csv, change maybe
     
 
 
@@ -73,6 +73,10 @@ def loadMovies(catalog, moviesfile):
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
         for production in companies:
             model.addProdCompany(catalog, production.strip(), movie)
+            
+        genreadd= movie['genres'].split(";")
+        for genre in genreadd:
+            model.addGenre(catalog, genre.strip(), movie)
 
 
 def loadDirectors(catalog, castFile):
@@ -99,4 +103,9 @@ def getMoviesProdCompany (cat, company):
 
 def getMoviesDirector (cat, nameInput):
     movies= model.getMoviesByDirector(cat, nameInput)
+    return movies
+
+
+def getMoviesGenre(cat, ginput):
+    movies= model.getMoviesGenre(cat, ginput)
     return movies

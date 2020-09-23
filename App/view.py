@@ -45,10 +45,6 @@ castingLarge='themoviesdb/MoviesCastingRaw-large.csv'
 castingSmall='themoviesdb/MoviesCastingRaw-small.csv'
 moviesLarge='themoviesdb/MoviesDetailsCleaned-large.csv'
 moviesSmall='themoviesdb/MoviesDetailsCleaned-small.csv'
-booksfile = 'GoodReads/books-small.csv'
-tagsfile = 'GoodReads/tags.csv' 
-booktagsfile = 'GoodReads/book_tags-small.csv'
-
 
 
 # ___________________________________________________
@@ -58,12 +54,8 @@ booktagsfile = 'GoodReads/book_tags-small.csv'
 # ___________________________________________________
 
 def printProductionCompany(prodCompany):
- #output pelicula de una compañia de producción
- #output =: imprime peliculas de una compañoia de producción
     if prodCompany:
-        
-        #print('Promedio: ' + str(prodCompany['vote_average']))
-        #print('Peliculas totales: ' + str(lt.size(prodCompany['movies'])))
+
         iterator = it.newIterator(prodCompany['movies'])
 
         while it.hasNext(iterator):
@@ -74,17 +66,25 @@ def printProductionCompany(prodCompany):
 
 
 
-def printMoviesbyDirector(movies):
-    print('Se encontraron: ' + str(lt.size(movies)) + ' peliculas')
-    iterator = it.newIterator(movies)
-    while it.hasNext(iterator):
-        movies = it.next(iterator)
-        print(movies['original_title'])
+def printMoviesbyDirector(directorInput):
+    if directorInput:
+        iterator = it.newIterator(directorInput['movies'])
+
+        while it.hasNext(iterator):
+            directorInput = it.next(iterator)
+            print('Titulo: ' + directorInput['original_title'] + '  Vote average: ' + directorInput['vote_average'])
+    else:
+        print('No se encontro el director')
 
 
-
-
-
+def printgenre(ginput):
+    if ginput:
+        iterator = it.newIterator(ginput['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+    else:
+        print('No se encontro el genero buscado')
 
 
 
@@ -93,9 +93,7 @@ def printMoviesbyDirector(movies):
 # ___________________________________________________
 
 def printMenu():
-    print("\n********************************  Grupo 04  ******************************************")
-    print("\n*********** CONSOLA DEL RETO 2 @@@ EXPLORANDO LA MAGIA DEL CINE RECARGADO @@@  *******")
-    print("\n**************************************************************************************")
+    print("\n*********************** RETO 2 @@@ EXPLORANDO LA MAGIA DEL CINE RECARGADO @@@  *******")
     print(" ")
     print("(1) Inicializar Catálogo de movies y casting")
     print("(2) Cargar información en el catálogo de movies y casting")
@@ -113,22 +111,25 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar ? ')
 
+
+    #input 1 and input 2 could be merged to create the catalogue and load it with movies in one input
     if int(inputs[0]) == 1:
-        print("Inicializando Catálogo  Movies y Casting ....")
         cont = controller.initCatalog()
-        input ("Se creo el catalogo. Clic para continuar   ....")
+        input ("presione una tecla para continuar...")
 
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
         controller.loadData(cont, moviesSmall, castingSmall)
-        print ("Se han cargado", str(controller.moviesSize(cont)), "peliculas: ")
+        print ("Se han cargado: ")
+        print(str(controller.moviesSize(cont)), "peliculas: ")
 
-        #estas funciones se pueden poner en model (con el formato controller-> model) por el momento funcionan bien aqui)
+        #these functions can be rewritten to follow the model-> controller distribution. use the moviessize print as a reference
         print (mp.size(cont["production_companies"]), "  compañias de producción ")
+        print (mp.size(cont["genres"]), "  generos ")
         print (mp.size(cont["directors"]), "  directores ")
         print (mp.size(cont["actors1"]), "  actores")
-        input ("presione una tecla para continuar")
+        input ("presione una tecla para continuar...")
 
     #-------------requerimiento 1-----------------
     #input:     nombre compania de producción
@@ -140,7 +141,7 @@ while True:
         nameInput = input("Nombre de compañia a buscar: ")
         nombreCompanias = controller.getMoviesProdCompany(cont, nameInput)
         printProductionCompany(nombreCompanias)
-        input ("presione una tecla para continuar") 
+        input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 2-----------------
     #input:    nombre de un director
@@ -148,11 +149,14 @@ while True:
     # output2: total de peliculas 
     # output3: vote average de las peliculas
     elif int(inputs[0]) == 4:
-        pass
+
+        print (mp.size(cont["directors"]), "  directores ")
+
+
         nameInput = input("Nombre de director: ")
         directors = controller.getMoviesDirector(cont, nameInput)
-        printMoviesbyDirector(nameInput)
-        input ("presione una tecla para continuar") 
+        #printMoviesbyDirector(directors)
+        input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 3-----------------
     #input:     nombre actor
@@ -170,8 +174,10 @@ while True:
     # output2: total de peliculas
     # output3: promedio de votos
     elif int(inputs[0]) == 6:
-        input ("Opcion en construccion")
-        pass
+        nameInput = input("Nombre de genero a buscar: ")
+        result = controller.getMoviesGenre(cont, nameInput)
+        printgenre(result)
+        input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 5-----------------
     #input:     pais
