@@ -31,15 +31,7 @@ def initCatalog():
 
     return catalog
 
-def initCatalogCast():
-    """
-    Llama la funcion de inicializacion del catalogo del modelo.
-    """
-    # catalog es utilizado para interactuar con el modelo
-    print ("Voy a inicializar el catalogo de casting ")
-    catalog1 = model.newCatalogCast()
 
-    return catalog1
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
@@ -62,13 +54,14 @@ def loadIdMovies(catalogo1, castingfile):
     castingfile = cf.data_dir + castingfile
     #input_file = csv.DictReader(open(moviesfile))
     input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
+    j=0
     for id in input_file:
         model.addId(catalogo1, id)
         director= id['director_name'].split(";")  # Se obtienen las productoras
-        
+        #j=j+1
+        #print (j)
         for idDir in director:
             model.addDirectorId(catalogo1, idDir.strip(), id)
-
         
 def loadData(catalog, moviesfile):
     """
@@ -86,7 +79,10 @@ def loadMovies(catalog, moviesfile):
     moviesfile = cf.data_dir + moviesfile
     #input_file = csv.DictReader(open(moviesfile))
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
+    i=0
     for movie in input_file:
+        #i=i+1
+        #print (i)
         model.addMovie(catalog, movie)
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
         for production in companies:
@@ -118,7 +114,7 @@ def getMoviesProdCompany (cat, company):
     return infoCompania
 
 def getMoviesDirector (catalogo1, director):
-    print ("Aqui estamos")
-    input ("Dar clic para continuar")
+    #print ("Aqui estamos")
+    #input ("Dar clic para continuar")
     infoDirector =model.getMoviesDirector(catalogo1, director)
     return infoDirector

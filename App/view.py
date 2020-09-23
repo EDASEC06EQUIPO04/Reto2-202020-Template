@@ -61,8 +61,8 @@ def printPeliculasDirector(director):
         while it.hasNext(iterator):
             cuenteTotal=cuenteTotal+1
             direct = it.next(iterator)
-            print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-            print('\nId_Director: ', " ", director['director'], " " ,director['average_rating'])
+        print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print('\nId_Director: ', " ", director['id'])
 
 
     else:
@@ -111,6 +111,8 @@ while True:
         print("\n**************************************************************************************")
         print (lt.getElement(cont['movies'],0))
         ultimo=int(lt.size(cont['movies']))-1
+        print ("el tamano de la lista es", len(cont['movies']))
+        print("")
         print (lt.getElement(cont['movies'],ultimo))
         print("")
         input ("De pruenba se imprime primera y 'ultima pelicula. Clic para continuar")
@@ -144,10 +146,15 @@ while True:
         print("\n**************************************************************************************")
         print(" Se encontraron  [ ", cuenteTotal, " ] peliculas del director selecionado")
         input ("Clic para continuar")
+        
         pass
 
     elif int(inputs[0]) == 5:
-        input ("Opcion en construccion")
+        #print (mp.get(cont,'director_Movies'))
+        print (mp.size(cont['production_companies']))
+
+        print (mp.size(cont['director_Movies']))
+        input ("Mapa de directores.. clic")
         pass
     else:
         sys.exit(0)

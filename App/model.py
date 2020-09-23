@@ -19,33 +19,37 @@ es decir contiene los modelos con los datos en memoria
 def newCatalog():
     
     catalog = {'movies': None,
-               'id': None,
                'production_companies': None,
-               'original_title': None,
-               'vote_average': None,
-               'vote_count': None,
-               'director':None,
                'director_Movies': None,
-               'id': None}
+               'id_Movie': None
+                }
+   
+    catalog['production_companies'] = mp.newMap(3000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.5,
+                                    comparefunction=compareproductionCompanies)
+    
+    catalog['director_Movies'] = mp.newMap(3000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.5,
+                                    comparefunction=compareproductionDirector)
+    catalog['id_Movie'] = mp.newMap(3000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.5,
+                                    comparefunction=compareproductionDirector)
+
 
     catalog['movies'] = lt.newList('ARRAY_LIST', compareMovieIds)
     catalog['id'] = lt.newList('ARRAY_LIST', compareDirectorIds)
-
     #lst = lt.newList("ARRAY_LIST")"SINGLE_LINKED")
 
-    print (  catalog['movies'])
+    #print (catalog['movies'])
+    #print (catalog['id'])
     #input ("@@@@ Clic para continuar @@@@ ")
 
-    catalog['production_companies'] = mp.newMap(2000,
-                                    maptype='PROBING',
-                                    #PROBING, CHAINING
-                                    loadfactor=0.1,
-                                    comparefunction=compareproductionCompanies)
-    catalog['director_Movies'] = mp.newMap(2000,
-                                    maptype='PROBING',
-                                    #PROBING, CHAINING
-                                    loadfactor=0.1,
-                                    comparefunction=compareproductionDirector)
 
     return catalog 
     
@@ -85,7 +89,8 @@ def newMovie(nameDirector):
     """
     directorCast= {'director': "","id":None, "movies": None,  "average_rating": 0}
     directorCast['director'] = nameDirector
-    directorCast['id'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
+    directorCast['id'] = lt.newList('SINGLE_LINKED', compareprodComsCast)   
+    
     directorCast['movies'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
     return directorCast
 
