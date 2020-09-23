@@ -108,11 +108,11 @@ def getMoviesProdCompany (cat, company):
     infoCompania =model.getMoviesProdCompany(cat,company)
     return infoCompania
 
-"""
+
 def getMoviesDirector (cat, nameInput):
-    movies= model.getMoviesByDirector(cat, nameInput)
+    movies = model.getMoviesByDirector(cat, nameInput)
     return movies
-"""
+
 
 def getMoviesGenre(cat, ginput):
     movies= model.getMoviesGenre(cat, ginput)
