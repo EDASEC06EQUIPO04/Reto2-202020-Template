@@ -149,7 +149,8 @@ while True:
     # output3: vote average de las peliculas
     
     elif int(inputs[0]) == 4:
-    '''
+
+
         print (mp.size(cont["directors"]), "  directores ")
 
 
@@ -157,7 +158,7 @@ while True:
         directors = controller.getMoviesDirector(cont, nameInput)
         #printMoviesbyDirector(directors)
         input ("presione una tecla para continuar...") 
-    '''
+    
 
     #-------------requerimiento 3-----------------
     #input:     nombre actor
