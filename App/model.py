@@ -10,7 +10,6 @@ assert config
 """
 En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
-
 """
 
 # -----------------------------------------------------
@@ -20,21 +19,21 @@ es decir contiene los modelos con los datos en memoria
 def newCatalog():
     
 
-  
+
     catalog = {'movies': None,
-               'id': None,
-               'production_companies': None,
-               'original_title': None,
-               'vote_average': None,
-               'vote_count': None}
+                'id': None,
+                'production_companies': None,
+                'original_title': None,
+                'vote_average': None,
+                'vote_count': None,
+                'genres': None}
 
 
     catalog['movies'] = lt.newList('ARRAY_LIST', compareMovieIds)
-    #lst = lt.newList("ARRAY_LIST")
-    #lst = lt.newList("SINGLE_LINKED")
+    #lt.newList("SINGLE_LINKED")
 
     print (  catalog['movies'])
-    #input ("@@@@ Clic para continuar @@@@ ")
+
 
     catalog['production_companies'] = mp.newMap(2000,
                                     maptype='PROBING',
@@ -42,8 +41,30 @@ def newCatalog():
                                     loadfactor=0.4,
                                     comparefunction=compareproductionCompanies)
 
+
     return catalog 
+
+
+def newCatalogCast():
     
+
+
+    catalog = {'cast': None,
+                'actor1_name': None,
+                'actor2_name': None,
+                'actor3_name': None,
+                'actor4_name': None,
+                'actor5_name': None,
+                'director_name':None}
+
+
+    catalog['cast'] = lt.newList('ARRAY_LIST', compareMovieIds)
+    #lt.newList("SINGLE_LINKED")
+
+
+
+
+    return catalog 
 
 
 
@@ -56,7 +77,6 @@ def addMovie(catalogo,movie):
     """
     Esta funcion adiciona un pelicula a la lista de movie,
     adicionalmente lo guarda en un Map usando como llave su production_companies_I.
-
     """
     lt.addLast(catalogo['movies'], movie)
     #mp.put(catalogo['production_companies_ID'], movie['id'], movie)
@@ -82,7 +102,6 @@ def addBook(catalog, book):
     print (mp.get(catalog['bookIds'],book['goodreads_book_id']))
     #input ("Ya estoy aqui.. y voy adicionar un book ....Clic para continuar")
     print ("===============================================================================================================")
-
     addBookYear(catalog, book)
     
 """
@@ -142,24 +161,8 @@ def addProductionCompany(catalog, companyName, movie):
         entry = mp.get(catalog['production_companies_ID'], companyName)
         nombrePelicula = me.getValue(entry)
     else:
-#        nombrePelicula = newPelicula(companyName) 
-        # aqui debo continuar con el codigo, pero no habia podido..
         mp.put(catalog['production_companies_ID'], companyName, nombrePelicula)
     
-    """ aqui hay que asegurar que el map cargue bien, algo me esta pasando que no lo logro """
-    """ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"""
-
-    #for i in  catalog['production_companies_ID']:   
-    #     print (mp.get(catalog['production_companies_ID'], companyName))
-    #input("dar clic")
-    #lt.addLast(nombrePelicula['vote_average'], movie)
-
-    #authavg = nombrePelicula['vote_average']
-    #PelAvg = movie['vote_average']
-    #if (authavg == 0.0):
-    #    nombrePelicula['vote_average'] = float(PelAvg)
-    #else:
-    #    nombrePelicula['vote_average'] = (authavg + float(PelAvg)) / 2
 
 
 
@@ -168,11 +171,7 @@ def addProductionCompany(catalog, companyName, movie):
 # ==============================
 
 def addProdCompany(catalog, prodcom, movie):
-    """
-    Esta función adiciona un libro a la lista de libros publicados
-    por un autor.
-    Cuando se adiciona el libro se actualiza el promedio de dicho autor
-    """
+
     companies = catalog['production_companies']
     existincompany = mp.contains(companies, prodcom)
     if existincompany:
@@ -182,6 +181,22 @@ def addProdCompany(catalog, prodcom, movie):
         companyadd = newProd(prodcom)
         mp.put(companies, prodcom, companyadd)
     lt.addLast(companyadd['movies'], movie)
+
+
+
+def addDirectorId(catalog1, director, id):
+
+    moviesID = catalog1['director_Movies']
+    existinID = mp.contains(moviesID, director)
+    if existinID:
+        entry = mp.get(moviesID, director)
+        movieAdd = me.getValue(entry)
+    else:
+        movieAdd= newMovie(director)
+        mp.put(moviesID, director, movieAdd)
+    lt.addLast(movieAdd['id'], id)
+
+
 
 
 # ==============================
@@ -224,6 +239,9 @@ def compareproductionCompanies(keyname, company):
         return -1
 
 
+
+def moviesSize(catalog):
+    return lt.size(catalog['movies'])
 
 
 def getMoviesProdCompany (cat, company):

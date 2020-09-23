@@ -45,10 +45,16 @@ def initCatalog():
     Llama la funcion de inicializacion del catalogo del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    print ("Voy a inicializar el catalogo")
     catalog = model.newCatalog()
+    catalog2= model.newCatalogCast()
 
     return catalog
+
+def initCatalogCast():
+    catalog = model.newCatalogCast()
+
+    return catalog
+
 
 
 
@@ -73,43 +79,38 @@ def loadMovies(catalog, moviesfile):
     productor, se crea una lista con sus peliculas
     """
     moviesfile = cf.data_dir + moviesfile
-    #input_file = csv.DictReader(open(moviesfile))
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
     for movie in input_file:
         model.addMovie(catalog, movie)
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
         for production in companies:
             model.addProdCompany(catalog, production.strip(), movie)
-        
-        
-        #average = movie['vote_average'].split(";")  # Se obtienen promedio  
-        #nameMovie = movie['original_title'].split(";")  # Se obtienen nombre de peicula   
-        #for j in companies:
-            #print (j)
-    #       model.addProductionCompany(catalog, j.strip(), nameMovie)
-        #for j in average:
-            #print (j) 
-        #for j in nameMovie:
-            #print (j)              
-            
 
-    #input (" El nombre de la compania y el tamano del Map. Clic para continuar")
+
+def loadDataCast(catalogo1, castingfile):
+    loadIdMovies(catalogo1, castingfile) 
+
+def loadIdMovies(catalogo1, castingfile):
+
+    castingfile = cf.data_dir + castingfile
+    input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
+    for id in input_file:
+        model.addId(catalogo1, id)
+        director= id['director_name'].split(";")  # Se obtienen las productoras
+        
+        for idDir in director:
+            model.addDirectorId(catalogo1, idDir.strip(), id)
+
 
 
 # ___________________________________________________
 #  Consultas
 # ___________________________________________________
+def moviesSize(catalog):
+    return model.moviesSize(catalog)
 
-def getBooksByAuthor(catalog, authorname):
-    """
-    Retorna los libros de un autor
-    """
-    authorinfo = model.getBooksByAuthor(catalog, authorname)
-    return authorinfo
 
 
 def getMoviesProdCompany (cat, company):
     infoCompania =model.getMoviesProdCompany(cat,company)
     return infoCompania
-
-
