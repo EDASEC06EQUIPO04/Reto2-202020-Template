@@ -75,6 +75,11 @@ def newCatalog():
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareActors)
+    catalog['id_movies'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
 
 #HERE WE CAN ADD ACTORS 2-4
 
@@ -362,6 +367,38 @@ def getMoviesGenre(cat, genre):
 
 
 
+
+
+
+def add_id (catalog, new_id, movie):
+
+    ids= catalog['id_movies']
+    exist_id= mp.contains(ids, new_id)
+
+    if exist_id:
+        entry= mp.get(ids, new_id)
+        add_movie_id= me.getValue(entry)
+    else:
+        add_movie_id= newID(new_id)
+        mp.put(ids, new_id, add_movie_id)
+
+    lt.addLast(add_movie_id['movie'], movie)
+
+
+
+
+
+def newID(new_id):
+    movie_id={'id_movies': new_id, 'movie': None}
+    movie_id["movie"]= lt.newList('SINGLE_LINKED', compareprodComs)  
+    return movie_id
+
+
+def getIdInfo (cat, ids):
+    ids = mp.get(cat['id_movies'], ids)
+    if ids:
+        return me.getValue(ids)
+    return None
 
 
 

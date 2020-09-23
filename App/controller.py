@@ -78,6 +78,12 @@ def loadMovies(catalog, moviesfile):
         genreadd= movie['genres'].split(";")
         for genre in genreadd:
             model.addGenre(catalog, genre.strip(), movie)
+        
+        
+        add_id_peliculas= movie['id'].split(";")
+        for ids in add_id_peliculas:
+            model.add_id(catalog, ids.strip(), movie)
+
 
 
 
@@ -115,3 +121,14 @@ def getMoviesDirector (cat, nameInput):
 def getMoviesGenre(cat, ginput):
     movies= model.getMoviesGenre(cat, ginput)
     return movies
+
+def getIdInfo (cat, ids):
+    info_id=model.getIdInfo(cat,ids)
+    return info_id
+
+
+
+
+
+
+

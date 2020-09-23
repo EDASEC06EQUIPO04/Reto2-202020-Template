@@ -68,13 +68,22 @@ def printProductionCompany(prodCompany):
 
 def printgenre(ginput):
     if ginput:
-        iterator = it.newIterator(ginput['movies'])
+        iterator = it.newIterator(ginput['casting'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
     else:
         print('No se encontro el genero buscado')
 
+
+def printdirector(ginput):
+    if ginput:
+        iterator = it.newIterator(ginput['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print(movie['movieIds'])
+    else:
+        print('No se encontro el genero buscado')
 
 
 # ___________________________________________________
@@ -153,8 +162,10 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        input ("Opcion en construccion")
-        pass
+        nameInput = input("Id: ")
+        result = controller.getIdInfo(cont, nameInput)
+        print(result['movie']['first']["info"]["original_title"])
+        input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
