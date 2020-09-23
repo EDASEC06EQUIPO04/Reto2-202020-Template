@@ -46,15 +46,8 @@ def initCatalog():
     """
     # catalog es utilizado para interactuar con el modelo
     catalog = model.newCatalog()
-    catalog2= model.newCatalogCast()
 
     return catalog
-
-def initCatalogCast():
-    catalog = model.newCatalogCast()
-
-    return catalog
-
 
 
 
@@ -63,11 +56,12 @@ def initCatalogCast():
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadData(catalog, moviesfile):
+def loadData(catalog, moviesfile, castFile):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadMovies(catalog, moviesfile) 
+    loadMovies(catalog, moviesfile)
+    loadDirectors( catalog, castFile)
     
 
 
@@ -81,18 +75,13 @@ def loadMovies(catalog, moviesfile):
             model.addProdCompany(catalog, production.strip(), movie)
 
 
-def loadDataCast(catalog, castingfile):
-    loadMoviesCast(catalog, castingfile) 
+def loadDirectors(catalog, castFile):
 
-def loadMoviesCast(catalog, castingfile):
-
-    castfile = cf.data_dir + castingfile
+    castfile = cf.data_dir + castFile
     input_file = csv.DictReader(open(castfile, encoding='utf-8-sig'),delimiter=";")
-    for movie in input_file:
-        model.addMovie(catalog, movie)
-        companies = movie['director_name'].split(";")  # Se obtienen las productoras
-        for production in companies:
-            model.addProdCompany(catalog, production.strip(), movie)
+    for director in input_file:
+        model.addDirector(catalog, director)
+
 
 
 # ___________________________________________________
@@ -106,3 +95,8 @@ def moviesSize(catalog):
 def getMoviesProdCompany (cat, company):
     infoCompania =model.getMoviesProdCompany(cat,company)
     return infoCompania
+
+
+def getMoviesDirector (cat, nameInput):
+    movies= model.getMoviesByDirector(cat, nameInput)
+    return movies

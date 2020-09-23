@@ -57,7 +57,7 @@ def loadData(catalog, booksfile, tagsfile, booktagsfile):
     Carga los datos de los archivos en el modelo
     """
     loadBooks(catalog, booksfile)
-  # loadTags(catalog, tagsfile)
+    loadTags(catalog, tagsfile)
   #  loadBooksTags(catalog, booktagsfile)
 
 

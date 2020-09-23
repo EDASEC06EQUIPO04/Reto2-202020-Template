@@ -27,15 +27,23 @@ def newCatalog():
                 'vote_average': None,
                 'vote_count': None,
                 'genres': None,
-                'production_countries':None}
+                'production_countries':None,
+                'actor1_name': None,
+                'actor2_name': None,
+                'actor3_name': None,
+                'actor4_name': None,
+                'actor5_name': None,
+                'director_name':None}
 
 
     catalog['movies'] = lt.newList('ARRAY_LIST', compareMovieIds)
     #lt.newList("SINGLE_LINKED")
 
-    print (  catalog['movies'])
-
-
+    catalog['id'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
     catalog['production_companies'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
@@ -51,64 +59,23 @@ def newCatalog():
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareproductionCompanies)
-
-
-
-
-
-    return catalog 
-
-
-def newCatalogCast():
-    
-
-
-    catalog = {'cast': None,
-                'id': None,
-                'actor1_name': None,
-                'actor2_name': None,
-                'actor3_name': None,
-                'actor4_name': None,
-                'actor5_name': None,
-                'director_name':None}
-
-
-    catalog['cast'] = lt.newList('ARRAY_LIST', compareMovieIds)
-    #lt.newList("SINGLE_LINKED")
-
-    print ( catalog['cast'])
-
-    catalog['director_name'] = mp.newMap(2000,
+    catalog['directors'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareActors)
-    catalog['actor1_name'] = mp.newMap(2000,
+    catalog['movieIds'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareActors)
-    catalog['actor2_name'] = mp.newMap(2000,
+    catalog['actors1'] = mp.newMap(2000,
                                     maptype='PROBING',
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareActors)
-    catalog['actor3_name'] = mp.newMap(2000,
-                                    maptype='PROBING',
-                                    #PROBING, CHAINING
-                                    loadfactor=0.4,
-                                    comparefunction=compareActors)
-    catalog['actor4_name'] = mp.newMap(2000,
-                                    maptype='PROBING',
-                                    #PROBING, CHAINING
-                                    loadfactor=0.4,
-                                    comparefunction=compareActors)
-    catalog['actor5_name'] = mp.newMap(2000,
-                                    maptype='PROBING',
-                                    #PROBING, CHAINING
-                                    loadfactor=0.4,
-                                    comparefunction=compareproductionCompanies)
 
+#HERE WE CAN ADD ACTORS 2-4
 
 
 
@@ -128,10 +95,6 @@ def addMovie(catalogo,movie):
     """
     lt.addLast(catalogo['movies'], movie)
 
-
-
-def addCast(catalogo,movie):
-    lt.addLast(catalogo['cast'], movie)
 
 
 def newPelicula(name):
@@ -193,6 +156,47 @@ def addProductionCompany(catalog, companyName, movie):
 
 
 
+
+
+
+
+
+def addDirector(catalog, director):
+#each row builds a catal;ogue entry from csv2
+
+#this row corresponds to the rows in the CSV
+    newdic = newDirector(director['director_name'], director['actor1_name'], director['id'])
+
+#these rows are the names assigned in the catalogue. note first item in brackest is the assigned name of the new catalogue, second one is the reference matching CSV and first line
+    mp.put(catalog['directors'], director['director_name'], newdic)
+    mp.put(catalog['actors1'], director['actor1_name'], newdic)
+    mp.put(catalog['movieIds'], director['id'], newdic)
+
+
+
+
+def newDirector(director, actor1, id):
+
+    casting= {'director': '',
+            'actor1': '',
+            'movieId': '',
+            'total_books': 0,
+            'movies': None,
+            'count': 0.0}
+    casting['director'] = director
+    casting['actor1'] = actor1
+    casting['movieIds'] = id
+    casting['movies'] = lt.newList()
+    return casting
+
+
+
+
+
+
+
+
+
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -210,6 +214,15 @@ def addProdCompany(catalog, prodcom, movie):
     lt.addLast(companyadd['movies'], movie)
 
 
+def getMoviesByDirector(catalog, nameInput):
+    """
+    Retorna los libros publicados en un año
+    """
+    director = mp.get(catalog['director_name'], nameInput)
+    movies=None
+    if director:
+        movies = me.getValue(director)['movies']
+    return movies
 
 
 

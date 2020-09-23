@@ -74,6 +74,18 @@ def printProductionCompany(prodCompany):
 
 
 
+def printMoviesbyDirector(movies):
+    print('Se encontraron: ' + str(lt.size(movies)) + ' peliculas')
+    iterator = it.newIterator(movies)
+    while it.hasNext(iterator):
+        movies = it.next(iterator)
+        print(movies['original_title'])
+
+
+
+
+
+
 
 
 # ___________________________________________________
@@ -109,9 +121,13 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, moviesSmall)
-        controller.loadDataCast(cont, castingSmall)
+        controller.loadData(cont, moviesSmall, castingSmall)
         print ("Se han cargado", str(controller.moviesSize(cont)), "peliculas: ")
+
+        #estas funciones se pueden poner en model (con el formato controller-> model) por el momento funcionan bien aqui)
+        print (mp.size(cont["production_companies"]), "  compañias de producción ")
+        print (mp.size(cont["directors"]), "  directores ")
+        print (mp.size(cont["actors1"]), "  actores")
         input ("presione una tecla para continuar")
 
     #-------------requerimiento 1-----------------
@@ -121,7 +137,6 @@ while True:
     # output3: vote average de las peliculas 
     elif int(inputs[0]) == 3:
     
-        print ("Se encontraron", mp.size(cont["production_companies"]), "compañias de producción ")
         nameInput = input("Nombre de compañia a buscar: ")
         nombreCompanias = controller.getMoviesProdCompany(cont, nameInput)
         printProductionCompany(nombreCompanias)
@@ -135,7 +150,8 @@ while True:
     elif int(inputs[0]) == 4:
         pass
         nameInput = input("Nombre de director: ")
-        #print(" Se encontraron  [ ", cuenteTotal, " ] peliculas del director selecionado")
+        directors = controller.getMoviesDirector(cont, nameInput)
+        printMoviesbyDirector(nameInput)
         input ("presione una tecla para continuar") 
 
     #-------------requerimiento 3-----------------
