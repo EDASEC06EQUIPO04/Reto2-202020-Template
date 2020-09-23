@@ -66,14 +66,6 @@ def printProductionCompany(prodCompany):
 
 
 
-def printMoviesbyDirector(directorInput):
-    iterator = it.newIterator(directorInput['casting'])
-
-    while it.hasNext(iterator):
-        movie = it.next(iterator)
-    print(directorInput['id']['first'])
-
-
 def printgenre(ginput):
     if ginput:
         iterator = it.newIterator(ginput['movies'])
@@ -151,7 +143,7 @@ while True:
 
         nameInput = input("Nombre de director: ")
         directors = controller.getMoviesDirector(cont, nameInput)
-        printMoviesbyDirector(directors)
+        print(directors)
         input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 3-----------------
