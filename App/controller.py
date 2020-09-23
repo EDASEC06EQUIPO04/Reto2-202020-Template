@@ -45,7 +45,6 @@ def initCatalog():
     Llama la funcion de inicializacion del catalogo del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    print ("Voy a inicializar el catalogo")
     catalog = model.newCatalog()
 
     return catalog
@@ -57,51 +56,62 @@ def initCatalog():
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadData(catalog, moviesfile):
+def loadData(catalog, moviesfile, castFile):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadMovies(catalog, moviesfile) 
+    loadMovies(catalog, moviesfile)
+    loadDirectors( catalog, castFile) #its called load directors but it loads the entire csv, change maybe
     
 
 
 def loadMovies(catalog, moviesfile):
-    """
-    Carga cada una de las lineas del archivo de peliculas.
-    - Se agrega cada pelicula al catalogo de movies
-    - Por cada movie se encuentran sus productor y por cada
-    productor, se crea una lista con sus peliculas
-    """
     moviesfile = cf.data_dir + moviesfile
-    #input_file = csv.DictReader(open(moviesfile))
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
     for movie in input_file:
         model.addMovie(catalog, movie)
+
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
         for production in companies:
             model.addProdCompany(catalog, production.strip(), movie)
-        
-        
-        #average = movie['vote_average'].split(";")  # Se obtienen promedio  
-        #nameMovie = movie['original_title'].split(";")  # Se obtienen nombre de peicula   
-        #for j in companies:
-            #print (j)
-    #       model.addProductionCompany(catalog, j.strip(), nameMovie)
-        #for j in average:
-            #print (j) 
-        #for j in nameMovie:
-            #print (j)              
             
+        genreadd= movie['genres'].split(";")
+        for genre in genreadd:
+            model.addGenre(catalog, genre.strip(), movie)
 
-    #input (" El nombre de la compania y el tamano del Map. Clic para continuar")
+
+
+def loadDirectors(catalogo1, castingfile):
+
+    castingfile = cf.data_dir + castingfile
+    input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
+    for id in input_file:
+        model.addId(catalogo1, id)
+
+        director= id['director_name'].split(";")  # Se obtienen las productoras
+        for idDir in director:
+            model.addDirectorId(catalogo1, idDir.strip(), id)
+
 
 
 # ___________________________________________________
 #  Consultas
 # ___________________________________________________
+def moviesSize(catalog):
+    return model.moviesSize(catalog)
 
 
 
 def getMoviesProdCompany (cat, company):
     infoCompania =model.getMoviesProdCompany(cat,company)
     return infoCompania
+
+
+def getMoviesDirector (cat, nameInput):
+    movies= model.getMoviesByDirector(cat, nameInput)
+    return movies
+
+
+def getMoviesGenre(cat, ginput):
+    movies= model.getMoviesGenre(cat, ginput)
+    return movies
