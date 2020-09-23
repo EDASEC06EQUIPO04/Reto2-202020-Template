@@ -72,12 +72,6 @@ def loadData(catalog, moviesfile):
 
 
 def loadMovies(catalog, moviesfile):
-    """
-    Carga cada una de las lineas del archivo de peliculas.
-    - Se agrega cada pelicula al catalogo de movies
-    - Por cada movie se encuentran sus productor y por cada
-    productor, se crea una lista con sus peliculas
-    """
     moviesfile = cf.data_dir + moviesfile
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
     for movie in input_file:
@@ -87,20 +81,18 @@ def loadMovies(catalog, moviesfile):
             model.addProdCompany(catalog, production.strip(), movie)
 
 
-def loadDataCast(catalogo1, castingfile):
-    loadIdMovies(catalogo1, castingfile) 
+def loadDataCast(catalog, castingfile):
+    loadMoviesCast(catalog, castingfile) 
 
-def loadIdMovies(catalogo1, castingfile):
+def loadMoviesCast(catalog, castingfile):
 
-    castingfile = cf.data_dir + castingfile
-    input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
-    for id in input_file:
-        model.addId(catalogo1, id)
-        director= id['director_name'].split(";")  # Se obtienen las productoras
-        
-        for idDir in director:
-            model.addDirectorId(catalogo1, idDir.strip(), id)
-
+    castfile = cf.data_dir + castingfile
+    input_file = csv.DictReader(open(castfile, encoding='utf-8-sig'),delimiter=";")
+    for movie in input_file:
+        model.addMovie(catalog, movie)
+        companies = movie['director_name'].split(";")  # Se obtienen las productoras
+        for production in companies:
+            model.addProdCompany(catalog, production.strip(), movie)
 
 
 # ___________________________________________________

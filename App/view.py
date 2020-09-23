@@ -110,7 +110,7 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
         controller.loadData(cont, moviesSmall)
-        #controller.loadDataCast(cont, castingSmall)
+        controller.loadDataCast(cont, castingSmall)
         print ("Se han cargado", str(controller.moviesSize(cont)), "peliculas: ")
         input ("presione una tecla para continuar")
 
@@ -142,7 +142,7 @@ while True:
     #input:     nombre actor
     # output1:  lista peliculas que participo
     # output2:  total de peliculas
-    # output3: vote average de las peliculas
+    # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
         input ("Opcion en construccion")

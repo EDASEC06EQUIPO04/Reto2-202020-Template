@@ -26,7 +26,8 @@ def newCatalog():
                 'original_title': None,
                 'vote_average': None,
                 'vote_count': None,
-                'genres': None}
+                'genres': None,
+                'production_countries':None}
 
 
     catalog['movies'] = lt.newList('ARRAY_LIST', compareMovieIds)
@@ -40,6 +41,19 @@ def newCatalog():
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareproductionCompanies)
+    catalog['genres'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
+    catalog['production_countries'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
+
+
+
 
 
     return catalog 
@@ -50,6 +64,7 @@ def newCatalogCast():
 
 
     catalog = {'cast': None,
+                'id': None,
                 'actor1_name': None,
                 'actor2_name': None,
                 'actor3_name': None,
@@ -60,6 +75,39 @@ def newCatalogCast():
 
     catalog['cast'] = lt.newList('ARRAY_LIST', compareMovieIds)
     #lt.newList("SINGLE_LINKED")
+
+    print ( catalog['cast'])
+
+    catalog['director_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareActors)
+    catalog['actor1_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareActors)
+    catalog['actor2_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareActors)
+    catalog['actor3_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareActors)
+    catalog['actor4_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareActors)
+    catalog['actor5_name'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
 
 
 
@@ -79,33 +127,12 @@ def addMovie(catalogo,movie):
     adicionalmente lo guarda en un Map usando como llave su production_companies_I.
     """
     lt.addLast(catalogo['movies'], movie)
-    #mp.put(catalogo['production_companies_ID'], movie['id'], movie)
-    #mp.put(catalog['id'], movies['id'], movies)
-    #print (mp.get(catalogo['production_companies_ID'], movie['id']))
-    #print (mp.get(catalog['id'],movies['id']))
-  
 
-    # input ("Ya estoy aqui.. y voy adicionar un book ....Clic para continuar")
-   
-    
-""" 
-def addBook(catalog, book):
-    
-    Esta funcion adiciona un libro a la lista de libros,
-    adicionalmente lo guarda en un Map usando como llave su Id.
-    Finalmente crea una entrada en el Map de años, para indicar que este
-    libro fue publicaco en ese año.
-    
-    lt.addLast(catalog['books'], book)
-    mp.put(catalog['bookIds'], book['goodreads_book_id'], book)
-    #print (mp.get(catalog['bookIds'],book['authors']))
-    print (mp.get(catalog['bookIds'],book['goodreads_book_id']))
-    #input ("Ya estoy aqui.. y voy adicionar un book ....Clic para continuar")
-    print ("===============================================================================================================")
-    addBookYear(catalog, book)
-    
-"""
-    #addProductionCompany(catalog, j.strip(), j)
+
+
+def addCast(catalogo,movie):
+    lt.addLast(catalogo['cast'], movie)
+
 
 def newPelicula(name):
     """
@@ -184,17 +211,6 @@ def addProdCompany(catalog, prodcom, movie):
 
 
 
-def addDirectorId(catalog1, director, id):
-
-    moviesID = catalog1['director_Movies']
-    existinID = mp.contains(moviesID, director)
-    if existinID:
-        entry = mp.get(moviesID, director)
-        movieAdd = me.getValue(entry)
-    else:
-        movieAdd= newMovie(director)
-        mp.put(moviesID, director, movieAdd)
-    lt.addLast(movieAdd['id'], id)
 
 
 
@@ -226,10 +242,6 @@ def comparePeliculasByName(keyname, pelicula):
 
 
 def compareproductionCompanies(keyname, company):
-    """
-    Compara dos nombres de autor. El primero es una cadena
-    y el segundo un entry de un map
-    """
     authentry = me.getKey(company)
     if (keyname == authentry):
         return 0
@@ -237,6 +249,16 @@ def compareproductionCompanies(keyname, company):
         return 1
     else:
         return -1
+
+def compareActors(keyname, actor):
+    authentry = me.getKey(actor)
+    if (keyname == authentry):
+        return 0
+    elif (keyname > authentry):
+        return 1
+    else:
+        return -1
+
 
 
 
