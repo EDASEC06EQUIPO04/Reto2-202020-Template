@@ -67,11 +67,14 @@ def printProductionCompany(prodCompany):
 
 
 def printMoviesbyDirector(directorInput):
-    iterator = it.newIterator(directorInput['casting'])
+    if directorInput:
+        iterator = it.newIterator(directorInput['movies'])
 
-    while it.hasNext(iterator):
-        movie = it.next(iterator)
-    print(directorInput['id']['first'])
+        while it.hasNext(iterator):
+            directorInput = it.next(iterator)
+            print('Titulo: ' + directorInput['original_title'] + '  Vote average: ' + directorInput['vote_average'])
+    else:
+        print('No se encontro el director')
 
 
 def printgenre(ginput):
@@ -82,7 +85,6 @@ def printgenre(ginput):
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
     else:
         print('No se encontro el genero buscado')
-
 
 
 # ___________________________________________________
@@ -145,14 +147,18 @@ while True:
     # output1: lista de todas las peliculas dirigidas  
     # output2: total de peliculas 
     # output3: vote average de las peliculas
+    
     elif int(inputs[0]) == 4:
+
 
         print (mp.size(cont["directors"]), "  directores ")
 
+
         nameInput = input("Nombre de director: ")
         directors = controller.getMoviesDirector(cont, nameInput)
-        printMoviesbyDirector(directors)
+        #printMoviesbyDirector(directors)
         input ("presione una tecla para continuar...") 
+    
 
     #-------------requerimiento 3-----------------
     #input:     nombre actor
@@ -161,9 +167,14 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        input ("Opcion en construccion")
-        pass
-
+        
+        nameInput = input("Id: ")
+        result = controller.getIdInfo(cont, nameInput)
+        print(result['movie']['first']["info"]["original_title"])
+        input ("presione una tecla para continuar...") 
+        '''
+        print(cont['id_movies']["2"])
+        '''
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
     # output1: lista de peliculas asociadas
