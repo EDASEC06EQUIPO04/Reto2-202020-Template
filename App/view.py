@@ -55,36 +55,111 @@ moviesSmall='themoviesdb/MoviesDetailsCleaned-small.csv'
 
 def printProductionCompany(prodCompany):
     if prodCompany:
-
+        
+        totalcounter=0
         iterator = it.newIterator(prodCompany['movies'])
 
         while it.hasNext(iterator):
             movie = it.next(iterator)
+            totalcounter+=1
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+        
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
     else:
         print('No se encontro la compañia buscada')
 
 
 
-def printMoviesbyDirector(directorInput):
-    if directorInput:
-        iterator = it.newIterator(directorInput['movies'])
-
-        while it.hasNext(iterator):
-            directorInput = it.next(iterator)
-            print('Titulo: ' + directorInput['original_title'] + '  Vote average: ' + directorInput['vote_average'])
-    else:
-        print('No se encontro el director')
-
-
 def printgenre(ginput):
     if ginput:
-        iterator = it.newIterator(ginput['movies'])
+        totalcounter=0
+        iterator = it.newIterator(ginput['casting'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
+            totalcounter+=1
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
     else:
         print('No se encontro el genero buscado')
+
+
+def printDirector(info):
+        aux=[]
+        totalcounter=0
+        iterator = it.newIterator(info['id'])
+
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            totalcounter+=1
+            aux.append(movie["id"])
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
+
+def printActor(info):
+        aux=[]
+        directores={}
+        totalcounter=0
+
+        iterator = it.newIterator(info['movies'])
+
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            aux.append(movie["id"])
+            totalcounter+=1
+            w=movie["director_name"]
+            if w not in directores:
+                directores[w]=1
+            else:
+                directores[w]+=1
+        
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        
+
+
+        director_final=""
+        i=0
+        for x in directores:
+            if directores[x] >= i :
+                i = directores[x]
+                director_final=x
+
+        print("El Actor trabajo con estos directores: ",  directores)        
+        print("El director con mas colaboraciones es: ", director_final)
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
+
+
+def printCountry(info):
+    if info:
+        aux=[]
+        totalcounter=0
+
+        iterator = it.newIterator(info['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            aux.append(movie["id"])
+            totalcounter+=1
+
+
+            #print('Titulo: ' + movie['original_title'] +"  " + movie['release_date'] + "  Director: ")
+        print (aux)
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            result2 = controller.getCasttIdInfo(cont,x )
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Fecha estreno: " + result['movie']['first']["info"]["release_date"]+ "     Director: " + result2['movie']['first']["info"]["director_name"])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+    else:
+        print('No se encontro el pais buscado')
+
+
+
+
 
 
 # ___________________________________________________
@@ -126,6 +201,7 @@ while True:
         #these functions can be rewritten to follow the model-> controller distribution. use the moviessize print as a reference
         print (mp.size(cont["production_companies"]), "  compañias de producción ")
         print (mp.size(cont["genres"]), "  generos ")
+        print (mp.size(cont["production_countries"]), "  paises")
         print (mp.size(cont["directors"]), "  directores ")
         print (mp.size(cont["actors1"]), "  actores")
         input ("presione una tecla para continuar...")
@@ -147,18 +223,15 @@ while True:
     # output1: lista de todas las peliculas dirigidas  
     # output2: total de peliculas 
     # output3: vote average de las peliculas
-    
     elif int(inputs[0]) == 4:
-
 
         print (mp.size(cont["directors"]), "  directores ")
 
-
         nameInput = input("Nombre de director: ")
-        directors = controller.getMoviesDirector(cont, nameInput)
-        #printMoviesbyDirector(directors)
+        info = controller.getMoviesDirector(cont, nameInput)
+
+        printDirector(info)
         input ("presione una tecla para continuar...") 
-    
 
     #-------------requerimiento 3-----------------
     #input:     nombre actor
@@ -167,14 +240,14 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        
-        nameInput = input("Id: ")
-        result = controller.getIdInfo(cont, nameInput)
-        print(result['movie']['first']["info"]["original_title"])
+
+
+        actor = input("Escriba el nombre de un actor: ")
+        info= controller.getActorMovies(cont, actor)
+        printActor(info)
         input ("presione una tecla para continuar...") 
-        '''
-        print(cont['id_movies']["2"])
-        '''
+            
+
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
     # output1: lista de peliculas asociadas
@@ -192,8 +265,18 @@ while True:
     # output2:  titulo y año de produccion (por pelicula)
     # output3:  nombre del director que la dirigio
     elif int(inputs[0]) == 7:
-        input ("Opcion en construccion")
-        pass
+        countryInput = input("Nombre de pais a buscar: ")
+        result = controller.getCountry(cont, countryInput)
+        print 
+        printCountry(result)
+
+        input ("presione una tecla para continuar...")
+
+    elif int(inputs[0])==8:
+        nameInput = input("Id: ")
+        result = controller.getCasttIdInfo(cont, nameInput)
+        print(result['movie']['first']["info"]["director_name"])
+
 
 
 
