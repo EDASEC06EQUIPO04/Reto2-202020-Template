@@ -78,6 +78,16 @@ def loadMovies(catalog, moviesfile):
         genreadd= movie['genres'].split(";")
         for genre in genreadd:
             model.addGenre(catalog, genre.strip(), movie)
+        
+        
+        add_id_peliculas= movie['id'].split(";")
+        for ids in add_id_peliculas:
+            model.add_id(catalog, ids.strip(), movie)
+
+        addCountry = movie['production_countries'].split(";")
+        for country in addCountry:
+            model.addCountry(catalog, country.strip(), movie)
+
 
 
 
@@ -85,12 +95,20 @@ def loadDirectors(catalogo1, castingfile):
 
     castingfile = cf.data_dir + castingfile
     input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
-    for id in input_file:
-        model.addId(catalogo1, id)
+    for movie in input_file:
+        model.addId(catalogo1, movie)
 
-        director= id['director_name'].split(";")  # Se obtienen las productoras
+        director= movie['director_name'].split(";")  # Se obtienen las productoras
         for idDir in director:
-            model.addDirectorId(catalogo1, idDir.strip(), id)
+            model.addDirectorId(catalogo1, idDir.strip(), movie)
+
+        actor= movie['actor1_name'].split(";")
+        for actores in actor:
+            model.addActor(catalogo1, actores.strip(), movie)
+
+        add_id= movie['id'].split(";")
+        for ids in add_id:
+            model.addCastid(catalogo1, ids.strip(), movie)
 
 
 
@@ -115,3 +133,22 @@ def getMoviesDirector (cat, nameInput):
 def getMoviesGenre(cat, ginput):
     movies= model.getMoviesGenre(cat, ginput)
     return movies
+
+def getIdInfo (cat, ids):
+    info_id=model.getIdInfo(cat,ids)
+    return info_id
+
+
+def getActorMovies (cat, actor):
+    pelis_actor =model.getActorMovies(cat,actor)
+    return pelis_actor
+
+
+def getCountry(cat, ginput):
+    movies= model.getCountry(cat, ginput)
+    return movies
+
+
+def getCasttIdInfo (cat, ids):
+    info_id=model.getCastIdInfo(cat,ids)
+    return info_id
