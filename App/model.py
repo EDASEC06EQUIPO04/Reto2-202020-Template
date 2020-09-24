@@ -415,6 +415,13 @@ def getMoviesGenre(cat, genre):
 
 
 
+def getCountry(cat, genre):
+    genreresult = mp.get(cat['production_countries'], genre)
+    if genreresult:
+        return me.getValue(genreresult)
+    return None
+
+
 
 
 
@@ -432,6 +439,24 @@ def add_id (catalog, new_id, movie):
 
     lt.addLast(add_movie_id['movie'], movie)
 
+def addCastid (catalog, new_id, movie):
+
+    ids= catalog['movieIds']
+    exist_id= mp.contains(ids, new_id)
+
+    if exist_id:
+        entry= mp.get(ids, new_id)
+        add_movie_id= me.getValue(entry)
+    else:
+        add_movie_id= newID(new_id)
+        mp.put(ids, new_id, add_movie_id)
+
+    lt.addLast(add_movie_id['movies'], movie)
+
+
+
+
+
 
 
 
@@ -441,12 +466,25 @@ def newID(new_id):
     movie_id["movie"]= lt.newList('SINGLE_LINKED', compareprodComs)  
     return movie_id
 
+def newCastID(new_id):
+    movie_id={'movieIds': new_id, 'casting': None}
+    movie_id["casting"]= lt.newList('SINGLE_LINKED', compareprodComs)  
+    return movie_id
+
+
 
 def getIdInfo (cat, ids):
     ids = mp.get(cat['id_movies'], ids)
     if ids:
         return me.getValue(ids)
     return None
+
+def getCastIdInfo (cat, ids):
+    ids = mp.get(cat['id_movies'], ids)
+    if ids:
+        return me.getValue(ids)
+    return None
+
 
 
 def getActorMovies (cat, actor):

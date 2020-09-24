@@ -95,17 +95,20 @@ def loadDirectors(catalogo1, castingfile):
 
     castingfile = cf.data_dir + castingfile
     input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
-    for id in input_file:
-        model.addId(catalogo1, id)
+    for movie in input_file:
+        model.addId(catalogo1, movie)
 
-        director= id['director_name'].split(";")  # Se obtienen las productoras
+        director= movie['director_name'].split(";")  # Se obtienen las productoras
         for idDir in director:
-            model.addDirectorId(catalogo1, idDir.strip(), id)
+            model.addDirectorId(catalogo1, idDir.strip(), movie)
 
-        actor= id['actor1_name'].split(";")
+        actor= movie['actor1_name'].split(";")
         for actores in actor:
-            model.addActor(catalogo1, actores.strip(), id)
+            model.addActor(catalogo1, actores.strip(), movie)
 
+        add_id= movie['id'].split(";")
+        for ids in add_id:
+            model.add_id(catalogo1, ids.strip(), movie)
 
 
 
@@ -141,6 +144,14 @@ def getActorMovies (cat, actor):
     return pelis_actor
 
 
+def getCountry(cat, ginput):
+    movies= model.getCountry(cat, ginput)
+    return movies
+
+
+def getCasttIdInfo (cat, ids):
+    info_id=model.getCastIdInfo(cat,ids)
+    return info_id
 
 
 

@@ -55,12 +55,17 @@ moviesSmall='themoviesdb/MoviesDetailsCleaned-small.csv'
 
 def printProductionCompany(prodCompany):
     if prodCompany:
-
+        
+        totalcounter=0
         iterator = it.newIterator(prodCompany['movies'])
 
         while it.hasNext(iterator):
             movie = it.next(iterator)
+            totalcounter+=1
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+        
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
     else:
         print('No se encontro la compañia buscada')
 
@@ -68,10 +73,13 @@ def printProductionCompany(prodCompany):
 
 def printgenre(ginput):
     if ginput:
+        totalcounter=0
         iterator = it.newIterator(ginput['casting'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
+            totalcounter+=1
             print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
     else:
         print('No se encontro el genero buscado')
 
@@ -84,6 +92,32 @@ def printdirector(ginput):
             print(movie['movieIds'])
     else:
         print('No se encontro el genero buscado')
+
+
+
+def printCountry(ginput):
+    if ginput:
+        iterator = it.newIterator(ginput['movies'])
+        totalcounter=0
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            totalcounter+=1
+            print('Titulo: ' + movie['original_title']  + movie['release_date'])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+    else:
+        print('No se encontro el genero buscado')
+
+
+
+def getTitleFromid(idinput):
+        result = controller.getIdInfo(cont, idinput)
+        print(result['movie']['first']["info"]["original_title"])
+
+def getDirectrorFromId(idinput):
+        result = controller.getCasttIdInfo(cont, idinput)
+        print(result['movie']['first']["info"]["original_title"])
+
+
 
 
 # ___________________________________________________
@@ -186,7 +220,11 @@ while True:
     # output2:  titulo y año de produccion (por pelicula)
     # output3:  nombre del director que la dirigio
     elif int(inputs[0]) == 7:
-        pass
+        countryInput = input("Nombre de pais a buscar: ")
+        result = controller.getCountry(cont, countryInput)
+        print 
+        printCountry(result)
+
         input ("presione una tecla para continuar...") 
 
 
