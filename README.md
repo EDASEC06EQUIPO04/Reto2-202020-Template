@@ -1,19 +1,13 @@
 #ISIS1225 - Estructura de un proyecto
 
-Entrega final lab 5
+Entrega final --Reto2
 
-Andres Lugos
-Julian Saenz
-Vanessa Pardo
-
-Archivo incluye el codigo para la entrega en "model" "controller" y "view". Se implemento exitosamente el map segun los parametros dados y se implemento la funcion para buscar peliculas por compañia de producción.
-
-los archivos "sampleModel" "SampleController" y "SampleView" son copias exactas del ejemplo en clase y se incluyen temporalmente como referencia para lo que resta del reto 2
+GRUPO4//--
+Andres Lugos//
+Julian Saenz//
+Vanessa Pardo//
 
 
-Este proyecto busca mostrar una posible forma de organizar el código que se va a desarrollar en los proyectos del curso.
-
-Esta organización es una sugerencia que puede ser adaptada a  las necesidades y gustos de cada persona.
 
 La estructura tiene los siguiente directorios y archivos:
 
