@@ -75,9 +75,11 @@ def newCatalog():
                                     #PROBING, CHAINING
                                     loadfactor=0.4,
                                     comparefunction=compareActors)
-
-#HERE WE CAN ADD ACTORS 2-4
-
+    catalog['id_movies'] = mp.newMap(2000,
+                                    maptype='PROBING',
+                                    #PROBING, CHAINING
+                                    loadfactor=0.4,
+                                    comparefunction=compareproductionCompanies)
 
 
     return catalog 
@@ -118,6 +120,14 @@ def newProd(name):
     company['production_companies'] = name
     company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
     return company
+
+def newCountry(name):
+
+    company= {'production_countries': "", "movies": None,  "average_rating": 0}
+    company['production_countries'] = name
+    company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
+    return company
+
 
 
 
@@ -252,6 +262,19 @@ def addDirectorId(catalog1, director, id):
     lt.addLast(movieAdd['id'], id)
 
 
+def addCountry(catalog, genre, movie):
+
+    newgenre = catalog['production_countries']
+    existgenre = mp.contains(newgenre, genre)
+    if existgenre:
+        entry = mp.get(newgenre, genre)
+        genreToAdd = me.getValue(entry)
+    else:
+        genreToAdd = newProd(genre)
+        mp.put(newgenre, genre, genreToAdd)
+    lt.addLast(genreToAdd['movies'], movie)
+
+
 
 
 def newMoviedirect(nameDirector):
@@ -264,6 +287,24 @@ def newMoviedirect(nameDirector):
     directorCast['id'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
     directorCast['movies'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
     return directorCast
+
+
+
+
+
+def addActor(catalog, actor, pelicula):
+
+    actores = catalog['actors1']
+    existinactor = mp.contains(actores, actor)
+    if existinactor:
+        entry = mp.get(actores, actor)
+        actoradd = me.getValue(entry)
+    else:
+        actoradd = newActor(actor)
+        mp.put(actores, actor, actoradd)
+    lt.addLast(actoradd['movies'], pelicula)
+
+
 
 # ==============================
 # Funciones de Comparacion
@@ -331,6 +372,15 @@ def compareDirectorIds(id1, id2):
         return -1
 
 
+def newActor(name):
+  
+    Actor= {'nombre': "", "movies": None,  "average_rating": 0}
+    Actor['nombre'] = name
+    Actor['movies'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)    
+    return Actor
+
+
+
 
 def moviesSize(catalog):
     return lt.size(catalog['movies'])
@@ -344,13 +394,7 @@ def getMoviesProdCompany (cat, company):
 
 
 
-def getMoviesByDirector(catalog, nameInput):
-    #this function searches with the name defined in the catalogue, not the name in the CS
 
-    directorsearched = mp.get(catalog['directors'], nameInput)
-    if directorsearched:
-        return me.getValue(directorsearched)
-    return None
 
 
 
@@ -362,8 +406,90 @@ def getMoviesGenre(cat, genre):
 
 
 
+def getCountry(cat, genre):
+    genreresult = mp.get(cat['production_countries'], genre)
+    if genreresult:
+        return me.getValue(genreresult)
+    return None
 
 
+
+
+
+def add_id (catalog, new_id, movie):
+
+    ids= catalog['id_movies']
+    exist_id= mp.contains(ids, new_id)
+
+    if exist_id:
+        entry= mp.get(ids, new_id)
+        add_movie_id= me.getValue(entry)
+    else:
+        add_movie_id= newID(new_id)
+        mp.put(ids, new_id, add_movie_id)
+
+    lt.addLast(add_movie_id['movie'], movie)
+
+def addCastid (catalog, new_id, movie):
+
+    ids= catalog['movieIds']
+    exist_id= mp.contains(ids, new_id)
+
+    if exist_id:
+        entry= mp.get(ids, new_id)
+        add_movie_id= me.getValue(entry)
+    else:
+        add_movie_id= newID(new_id)
+        mp.put(ids, new_id, add_movie_id)
+
+    lt.addLast(add_movie_id['movie'], movie)
+
+
+
+
+
+
+
+
+
+def newID(new_id):
+    movie_id={'id_movies': new_id, 'movie': None}
+    movie_id["movie"]= lt.newList('SINGLE_LINKED', compareprodComs)  
+    return movie_id
+
+def newCastID(new_id):
+    movie_id={'movieIds': new_id, 'casting': None}
+    movie_id["casting"]= lt.newList('SINGLE_LINKED', compareprodComs)  
+    return movie_id
+
+
+
+def getIdInfo (cat, ids):
+    ids = mp.get(cat['id_movies'], ids)
+    if ids:
+        return me.getValue(ids)
+    return None
+
+def getCastIdInfo (cat, ids):
+    ids = mp.get(cat['movieIds'], ids)
+    if ids:
+        return me.getValue(ids)
+    return None
+
+
+
+def getActorMovies (cat, actor):
+    pelis = mp.get(cat['actors1'], actor)
+    if pelis:
+        return me.getValue(pelis)
+    return None
+
+def getMoviesByDirector(catalog, nameInput):
+
+    directorsearched = mp.get(catalog['directors'], nameInput)
+    if directorsearched:
+        return me.getValue(directorsearched)
+    return None
 
 
 """
