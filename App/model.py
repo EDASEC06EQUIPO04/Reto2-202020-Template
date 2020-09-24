@@ -81,9 +81,6 @@ def newCatalog():
                                     loadfactor=0.4,
                                     comparefunction=compareproductionCompanies)
 
-#HERE WE CAN ADD ACTORS 2-4
-
-
 
     return catalog 
 
@@ -397,13 +394,7 @@ def getMoviesProdCompany (cat, company):
 
 
 
-def getMoviesByDirector(catalog, nameInput):
-    #this function searches with the name defined in the catalogue, not the name in the CS
 
-    directorsearched = mp.get(catalog['directors'], nameInput)
-    if directorsearched:
-        return me.getValue(directorsearched)
-    return None
 
 
 
@@ -451,7 +442,7 @@ def addCastid (catalog, new_id, movie):
         add_movie_id= newID(new_id)
         mp.put(ids, new_id, add_movie_id)
 
-    lt.addLast(add_movie_id['movies'], movie)
+    lt.addLast(add_movie_id['movie'], movie)
 
 
 
@@ -480,7 +471,7 @@ def getIdInfo (cat, ids):
     return None
 
 def getCastIdInfo (cat, ids):
-    ids = mp.get(cat['id_movies'], ids)
+    ids = mp.get(cat['movieIds'], ids)
     if ids:
         return me.getValue(ids)
     return None
@@ -493,8 +484,12 @@ def getActorMovies (cat, actor):
         return me.getValue(pelis)
     return None
 
+def getMoviesByDirector(catalog, nameInput):
 
-
+    directorsearched = mp.get(catalog['directors'], nameInput)
+    if directorsearched:
+        return me.getValue(directorsearched)
+    return None
 
 
 """

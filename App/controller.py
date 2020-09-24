@@ -108,7 +108,7 @@ def loadDirectors(catalogo1, castingfile):
 
         add_id= movie['id'].split(";")
         for ids in add_id:
-            model.add_id(catalogo1, ids.strip(), movie)
+            model.addCastid(catalogo1, ids.strip(), movie)
 
 
 
@@ -152,6 +152,3 @@ def getCountry(cat, ginput):
 def getCasttIdInfo (cat, ids):
     info_id=model.getCastIdInfo(cat,ids)
     return info_id
-
-
-

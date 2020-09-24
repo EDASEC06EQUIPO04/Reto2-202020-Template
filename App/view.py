@@ -84,38 +84,80 @@ def printgenre(ginput):
         print('No se encontro el genero buscado')
 
 
-def printdirector(ginput):
-    if ginput:
-        iterator = it.newIterator(ginput['movies'])
-        while it.hasNext(iterator):
-            movie = it.next(iterator)
-            print(movie['movieIds'])
-    else:
-        print('No se encontro el genero buscado')
-
-
-
-def printCountry(ginput):
-    if ginput:
-        iterator = it.newIterator(ginput['movies'])
+def printDirector(info):
+        aux=[]
         totalcounter=0
+        iterator = it.newIterator(info['id'])
+
         while it.hasNext(iterator):
             movie = it.next(iterator)
             totalcounter+=1
-            print('Titulo: ' + movie['original_title']  + movie['release_date'])
+            aux.append(movie["id"])
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
+
+def printActor(info):
+        aux=[]
+        directores={}
+        totalcounter=0
+
+        iterator = it.newIterator(info['movies'])
+
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            aux.append(movie["id"])
+            totalcounter+=1
+            w=movie["director_name"]
+            if w not in directores:
+                directores[w]=1
+            else:
+                directores[w]+=1
+        
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        
+
+
+        director_final=""
+        i=0
+        for x in directores:
+            if directores[x] >= i :
+                i = directores[x]
+                director_final=x
+
+        print("El Actor trabajo con estos directores: ",  directores)        
+        print("El director con mas colaboraciones es: ", director_final)
+        print ('Total de peliculas encontradas:  ' + str(totalcounter))
+
+
+
+def printCountry(info):
+    if info:
+        aux=[]
+        totalcounter=0
+
+        iterator = it.newIterator(info['movies'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            aux.append(movie["id"])
+            totalcounter+=1
+
+
+            #print('Titulo: ' + movie['original_title'] +"  " + movie['release_date'] + "  Director: ")
+        print (aux)
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            result2 = controller.getCasttIdInfo(cont,x )
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Fecha estreno: " + result['movie']['first']["info"]["release_date"]+ "     Director: " + result2['movie']['first']["info"]["director_name"])
         print ('Total de peliculas encontradas:  ' + str(totalcounter))
     else:
-        print('No se encontro el genero buscado')
+        print('No se encontro el pais buscado')
 
 
-
-def getTitleFromid(idinput):
-        result = controller.getIdInfo(cont, idinput)
-        print(result['movie']['first']["info"]["original_title"])
-
-def getDirectrorFromId(idinput):
-        result = controller.getCasttIdInfo(cont, idinput)
-        print(result['movie']['first']["info"]["original_title"])
 
 
 
@@ -186,8 +228,9 @@ while True:
         print (mp.size(cont["directors"]), "  directores ")
 
         nameInput = input("Nombre de director: ")
-        directors = controller.getMoviesDirector(cont, nameInput)
-        print(directors)
+        info = controller.getMoviesDirector(cont, nameInput)
+
+        printDirector(info)
         input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 3-----------------
@@ -198,10 +241,12 @@ while True:
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
 
+
         actor = input("Escriba el nombre de un actor: ")
         info= controller.getActorMovies(cont, actor)
-        print(info["movies"])
+        printActor(info)
         input ("presione una tecla para continuar...") 
+            
 
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
@@ -225,7 +270,13 @@ while True:
         print 
         printCountry(result)
 
-        input ("presione una tecla para continuar...") 
+        input ("presione una tecla para continuar...")
+
+    elif int(inputs[0])==8:
+        nameInput = input("Id: ")
+        result = controller.getCasttIdInfo(cont, nameInput)
+        print(result['movie']['first']["info"]["director_name"])
+
 
 
 
