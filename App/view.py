@@ -162,14 +162,23 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        nameInput = input("Id: ")
-        result = controller.getIdInfo(cont, nameInput)
-        print(result['movie']['first']["info"]["original_title"])
-        input ("presione una tecla para continuar...") 
+        
 
         actor = input("Escriba el nombre de un actor: ")
         info= controller.getActorMovies(cont, actor)
-        print(info["movies"])
+        aux=[]
+        iterator = it.newIterator(info['movies'])
+
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            aux.append(movie["id"])
+        
+        for x in aux:
+            result = controller.getIdInfo(cont, x)
+            print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        
+        input ("presione una tecla para continuar...") 
+            
 
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
