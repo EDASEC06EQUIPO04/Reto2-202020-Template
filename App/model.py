@@ -124,6 +124,14 @@ def newProd(name):
     company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
     return company
 
+def newCountry(name):
+
+    company= {'production_countries': "", "movies": None,  "average_rating": 0}
+    company['production_countries'] = name
+    company['movies'] = lt.newList('SINGLE_LINKED', compareprodComs)    
+    return company
+
+
 
 
 
@@ -257,6 +265,19 @@ def addDirectorId(catalog1, director, id):
     lt.addLast(movieAdd['id'], id)
 
 
+def addCountry(catalog, genre, movie):
+
+    newgenre = catalog['production_countries']
+    existgenre = mp.contains(newgenre, genre)
+    if existgenre:
+        entry = mp.get(newgenre, genre)
+        genreToAdd = me.getValue(entry)
+    else:
+        genreToAdd = newProd(genre)
+        mp.put(newgenre, genre, genreToAdd)
+    lt.addLast(genreToAdd['movies'], movie)
+
+
 
 
 def newMoviedirect(nameDirector):
@@ -269,6 +290,24 @@ def newMoviedirect(nameDirector):
     directorCast['id'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
     directorCast['movies'] = lt.newList('SINGLE_LINKED', compareprodComsCast)    
     return directorCast
+
+
+
+
+
+def addActor(catalog, actor, pelicula):
+
+    actores = catalog['actors1']
+    existinactor = mp.contains(actores, actor)
+    if existinactor:
+        entry = mp.get(actores, actor)
+        actoradd = me.getValue(entry)
+    else:
+        actoradd = newActor(actor)
+        mp.put(actores, actor, actoradd)
+    lt.addLast(actoradd['movies'], pelicula)
+
+
 
 # ==============================
 # Funciones de Comparacion
@@ -336,6 +375,15 @@ def compareDirectorIds(id1, id2):
         return -1
 
 
+def newActor(name):
+  
+    Actor= {'nombre': "", "movies": None,  "average_rating": 0}
+    Actor['nombre'] = name
+    Actor['movies'] = lt.newList('SINGLE_LINKED', comparePeliculasByName)    
+    return Actor
+
+
+
 
 def moviesSize(catalog):
     return lt.size(catalog['movies'])
@@ -399,6 +447,14 @@ def getIdInfo (cat, ids):
     if ids:
         return me.getValue(ids)
     return None
+
+
+def getActorMovies (cat, actor):
+    pelis = mp.get(cat['actors1'], actor)
+    if pelis:
+        return me.getValue(pelis)
+    return None
+
 
 
 

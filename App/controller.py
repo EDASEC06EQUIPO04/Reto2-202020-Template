@@ -84,6 +84,10 @@ def loadMovies(catalog, moviesfile):
         for ids in add_id_peliculas:
             model.add_id(catalog, ids.strip(), movie)
 
+        addCountry = movie['production_countries'].split(";")
+        for country in addCountry:
+            model.addCountry(catalog, country.strip(), movie)
+
 
 
 
@@ -97,6 +101,11 @@ def loadDirectors(catalogo1, castingfile):
         director= id['director_name'].split(";")  # Se obtienen las productoras
         for idDir in director:
             model.addDirectorId(catalogo1, idDir.strip(), id)
+
+        actor= id['actor1_name'].split(";")
+        for actores in actor:
+            model.addActor(catalogo1, actores.strip(), id)
+
 
 
 
@@ -127,6 +136,9 @@ def getIdInfo (cat, ids):
     return info_id
 
 
+def getActorMovies (cat, actor):
+    pelis_actor =model.getActorMovies(cat,actor)
+    return pelis_actor
 
 
 

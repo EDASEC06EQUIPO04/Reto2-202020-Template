@@ -125,6 +125,7 @@ while True:
         #these functions can be rewritten to follow the model-> controller distribution. use the moviessize print as a reference
         print (mp.size(cont["production_companies"]), "  compañias de producción ")
         print (mp.size(cont["genres"]), "  generos ")
+        print (mp.size(cont["production_countries"]), "  paises")
         print (mp.size(cont["directors"]), "  directores ")
         print (mp.size(cont["actors1"]), "  actores")
         input ("presione una tecla para continuar...")
@@ -162,9 +163,10 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        nameInput = input("Id: ")
-        result = controller.getIdInfo(cont, nameInput)
-        print(result['movie']['first']["info"]["original_title"])
+
+        actor = input("Escriba el nombre de un actor: ")
+        info= controller.getActorMovies(cont, actor)
+        print(info["movies"])
         input ("presione una tecla para continuar...") 
 
     #-------------requerimiento 4-----------------
@@ -184,8 +186,8 @@ while True:
     # output2:  titulo y año de produccion (por pelicula)
     # output3:  nombre del director que la dirigio
     elif int(inputs[0]) == 7:
-        input ("Opcion en construccion")
         pass
+        input ("presione una tecla para continuar...") 
 
 
 
