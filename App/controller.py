@@ -70,6 +70,7 @@ def loadMovies(catalog, moviesfile):
     input_file = csv.DictReader(open(moviesfile, encoding='utf-8-sig'),delimiter=";")
     for movie in input_file:
         model.addMovie(catalog, movie)
+
         companies = movie['production_companies'].split(";")  # Se obtienen las productoras
         for production in companies:
             model.addProdCompany(catalog, production.strip(), movie)
@@ -77,7 +78,8 @@ def loadMovies(catalog, moviesfile):
         genreadd= movie['genres'].split(";")
         for genre in genreadd:
             model.addGenre(catalog, genre.strip(), movie)
-
+        
+        
         add_id_peliculas= movie['id'].split(";")
         for ids in add_id_peliculas:
             model.add_id(catalog, ids.strip(), movie)
@@ -85,13 +87,20 @@ def loadMovies(catalog, moviesfile):
 
 
 
-def loadDirectors(catalog, castFile):
+def loadDirectors(catalogo1, castingfile):
 
-    castfile = cf.data_dir + castFile
-    input_file = csv.DictReader(open(castfile, encoding='utf-8-sig'),delimiter=";")
-    for director in input_file:
-        model.addDirector(catalog, director)
-    
+    castingfile = cf.data_dir + castingfile
+    input_file = csv.DictReader(open(castingfile, encoding='utf-8-sig'),delimiter=";")
+    for id in input_file:
+        model.addId(catalogo1, id)
+
+        director= id['director_name'].split(";")  # Se obtienen las productoras
+        for idDir in director:
+            model.addDirectorId(catalogo1, idDir.strip(), id)
+
+        actor= id['actor1_name'].split(";")
+        for actores in actor:
+            model.addActor(catalogo1, actores.strip(), id)
 
 
 
@@ -110,7 +119,7 @@ def getMoviesProdCompany (cat, company):
 
 
 def getMoviesDirector (cat, nameInput):
-    movies = model.getMoviesByDirector(cat, nameInput)
+    movies= model.getMoviesByDirector(cat, nameInput)
     return movies
 
 
@@ -118,14 +127,14 @@ def getMoviesGenre(cat, ginput):
     movies= model.getMoviesGenre(cat, ginput)
     return movies
 
-
 def getIdInfo (cat, ids):
     info_id=model.getIdInfo(cat,ids)
     return info_id
-
 
 def getActorMovies (cat, actor):
     pelis_actor =model.getActorMovies(cat,actor)
     return pelis_actor
 
-    
+
+
+

@@ -66,20 +66,22 @@ def printProductionCompany(prodCompany):
 
 
 
-def printMoviesbyDirector(directorInput):
-    iterator = it.newIterator(directorInput['casting'])
-
-    while it.hasNext(iterator):
-        movie = it.next(iterator)
-    print(directorInput['id']['first'])
-
-
 def printgenre(ginput):
+    if ginput:
+        iterator = it.newIterator(ginput['casting'])
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+    else:
+        print('No se encontro el genero buscado')
+
+
+def printdirector(ginput):
     if ginput:
         iterator = it.newIterator(ginput['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
-            print('Titulo: ' + movie['original_title'] + '  Vote average: ' + movie['vote_average'])
+            print(movie['movieIds'])
     else:
         print('No se encontro el genero buscado')
 
@@ -144,18 +146,14 @@ while True:
     # output1: lista de todas las peliculas dirigidas  
     # output2: total de peliculas 
     # output3: vote average de las peliculas
-    
     elif int(inputs[0]) == 4:
-
 
         print (mp.size(cont["directors"]), "  directores ")
 
-
         nameInput = input("Nombre de director: ")
         directors = controller.getMoviesDirector(cont, nameInput)
-        #printMoviesbyDirector(directors)
+        print(directors)
         input ("presione una tecla para continuar...") 
-    
 
     #-------------requerimiento 3-----------------
     #input:     nombre actor
@@ -164,12 +162,15 @@ while True:
     # output3:  vote average de las peliculas
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
-        
         nameInput = input("Id: ")
         result = controller.getIdInfo(cont, nameInput)
         print(result['movie']['first']["info"]["original_title"])
         input ("presione una tecla para continuar...") 
-        
+
+        actor = input("Escriba el nombre de un actor: ")
+        info= controller.getActorMovies(cont, actor)
+        print(info["movies"])
+
     #-------------requerimiento 4-----------------
     #input:     genero cinematografico
     # output1: lista de peliculas asociadas
