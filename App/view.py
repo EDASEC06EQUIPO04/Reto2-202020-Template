@@ -74,7 +74,7 @@ def printProductionCompany(prodCompany):
 def printgenre(ginput):
     if ginput:
         totalcounter=0
-        iterator = it.newIterator(ginput['casting'])
+        iterator = it.newIterator(ginput['movies'])
         while it.hasNext(iterator):
             movie = it.next(iterator)
             totalcounter+=1
