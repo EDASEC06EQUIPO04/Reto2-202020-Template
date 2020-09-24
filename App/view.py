@@ -163,19 +163,38 @@ while True:
     # output 4: nombre de director con mas collabs (peliculas que incluyen actor + director)
     elif int(inputs[0]) == 5:
         
-
         actor = input("Escriba el nombre de un actor: ")
         info= controller.getActorMovies(cont, actor)
         aux=[]
+        directores={}
+
         iterator = it.newIterator(info['movies'])
 
         while it.hasNext(iterator):
             movie = it.next(iterator)
             aux.append(movie["id"])
+
+            w=movie["director_name"]
+            if w not in directores:
+                directores[w]=1
+            else:
+                directores[w]+=1
         
         for x in aux:
             result = controller.getIdInfo(cont, x)
             print("Titulo: " +  result['movie']['first']["info"]["original_title"] + "            Vote Average: " + result['movie']['first']["info"]["vote_average"])
+        
+
+
+        director_final=""
+        i=0
+        for x in directores:
+            if directores[x] >= i :
+                i = directores[x]
+                director_final=x
+
+        print(directores)        
+        print("El director con mas colavoraciones es: ", director_final)
         
         input ("presione una tecla para continuar...") 
             
